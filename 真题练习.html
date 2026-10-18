@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>入党教育培训班真题题库 · 答题卡悬浮</title>
+<style>
+  *{box-sizing:border-box;}
+  body{
+    margin:0;padding:24px 16px 70px;
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+    background:#f5f6f8;color:#222;line-height:1.7;
+  }
+  .wrap{max-width:880px;margin:0 auto;}
+  header{
+    background:linear-gradient(135deg,#c62828,#8e0000);
+    color:#fff;padding:22px 26px;border-radius:14px;
+    box-shadow:0 6px 18px rgba(198,40,40,.25);
+  }
+  h1{margin:0 0 4px;font-size:21px;letter-spacing:1px;}
+  .sub{opacity:.85;font-size:13px;}
+  .stats{display:flex;gap:26px;margin-top:16px;flex-wrap:wrap;font-size:13px;}
+  .stats div{display:flex;flex-direction:column;}
+  .stats b{font-size:19px;line-height:1.3;font-weight:700;}
+
+  .panel{
+    background:#fff;border-radius:12px;padding:14px 16px;margin:16px 0;
+    box-shadow:0 1px 3px rgba(0,0,0,.06);
+  }
+  .panel .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+  .panel .row + .row{margin-top:10px;}
+  .panel .lbl{font-size:13px;color:#888;min-width:56px;}
+  .panel button{
+    padding:6px 16px;border:1.5px solid #e0e0e0;background:#fff;border-radius:20px;
+    font-size:13.5px;cursor:pointer;font-family:inherit;color:#444;transition:.15s;
+  }
+  .panel button:hover{border-color:#ef9a9a;}
+  .panel button.active{background:#c62828;border-color:#c62828;color:#fff;}
+  .panel .reset{margin-left:auto;border-color:#c62828;color:#c62828;}
+  .panel .reset:hover{background:#ffebee;}
+
+  /* ===== 题目卡片 ===== */
+  .card{
+    background:#fff;border-radius:12px;padding:16px 18px;margin-bottom:12px;
+    box-shadow:0 1px 3px rgba(0,0,0,.07);
+    scroll-margin-top: 20px;
+  }
+  .card.flash{animation:flash 1.6s ease;}
+  @keyframes flash{
+    0%{box-shadow:0 0 0 3px rgba(198,40,40,.55);}
+    100%{box-shadow:0 1px 3px rgba(0,0,0,.07);}
+  }
+  .qhead{display:flex;gap:8px;align-items:center;margin-bottom:8px;}
+  .tag{font-size:12px;padding:1px 9px;border-radius:20px;}
+  .tag.choice{background:#e8eaf6;color:#3949ab;}
+  .tag.fill{background:#fff3e0;color:#e65100;}
+  .tag.judge{background:#e0f2f1;color:#00695c;}
+  .num{font-size:13px;color:#999;margin-left:auto;font-weight:600;}
+  .qtext{font-weight:500;margin-bottom:10px;font-size:15.5px;}
+  .options{display:flex;flex-direction:column;gap:8px;}
+  .options.judge{flex-direction:row;}
+  .options.judge .opt{flex:1;text-align:center;}
+  .opt{
+    text-align:left;padding:9px 14px;border:1.5px solid #e4e4e4;border-radius:9px;
+    background:#fff;font-size:15px;cursor:pointer;font-family:inherit;
+    transition:.15s;color:#333;line-height:1.55;
+  }
+  .opt:hover:not(:disabled){border-color:#c62828;background:#fff8f8;}
+  .opt:disabled{cursor:default;opacity:.95;}
+  .opt.ok{border-color:#2e7d32;background:#e8f5e9;color:#1b5e20;}
+  .opt.bad{border-color:#c62828;background:#ffebee;color:#b71c1c;}
+  .fillq{font-size:15.5px;line-height:2.1;font-weight:500;}
+  .blank{
+    border:none;border-bottom:1.6px solid #bbb;background:#fafafa;
+    min-width:130px;padding:2px 8px;font-size:15px;text-align:center;
+    outline:none;color:#1565c0;font-family:inherit;border-radius:4px 4px 0 0;
+  }
+  .blank:focus{border-bottom-color:#c62828;background:#fff8f8;}
+  .blank.ok{border-bottom-color:#2e7d32;background:#e8f5e9;color:#1b5e20;}
+  .blank.bad{border-bottom-color:#c62828;background:#ffebee;color:#b71c1c;}
+  .blank:disabled{opacity:1;}
+  .submit{
+    margin-top:12px;padding:8px 22px;background:#c62828;color:#fff;border:none;
+    border-radius:8px;cursor:pointer;font-size:14px;font-family:inherit;transition:.15s;
+  }
+  .submit:hover{background:#a11c1c;}
+  .fb{margin-top:11px;font-size:14px;padding:8px 12px;border-radius:8px;}
+  .fb.right{background:#e8f5e9;color:#1b5e20;}
+  .fb.wrong{background:#ffebee;color:#b71c1c;}
+  .empty{text-align:center;color:#999;padding:40px;}
+  .note{
+    margin-top:18px;padding:12px 16px;background:#fff8e1;border-radius:10px;
+    font-size:13px;color:#795548;line-height:1.8;
+  }
+
+  /* ===== 答题卡悬浮按钮 ===== */
+  .fab-toc {
+    position: fixed;
+    right: 24px;
+    bottom: 40px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #1976d2;
+    color: #fff;
+    border: none;
+    box-shadow: 0 4px 14px rgba(25, 118, 210, 0.45);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 900;
+    transition: transform 0.2s, background 0.2s;
+  }
+  .fab-toc:hover {
+    background: #1565c0;
+    transform: scale(1.05);
+  }
+  .fab-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background: #c62828;
+    color: #fff;
+    font-size: 11px;
+    padding: 2px 6px;
+    border-radius: 10px;
+    border: 2px solid #f5f6f8;
+    font-weight: normal;
+    line-height: 1.2;
+  }
+
+  /* ===== 答题卡弹窗 ===== */
+  .toc-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 1000;
+    display: flex;
+    align-items: flex-end;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+  }
+  .toc-modal.show {
+    opacity: 1;
+    visibility: visible;
+  }
+  .toc-content {
+    background: #fff;
+    width: 100%;
+    max-height: 75vh;
+    border-radius: 16px 16px 0 0;
+    padding: 20px;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+    transform: translateY(100%);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: flex;
+    flex-direction: column;
+  }
+  .toc-modal.show .toc-content {
+    transform: translateY(0);
+  }
+  /* PC端居中显示 */
+  @media (min-width: 600px) {
+    .toc-modal {
+      align-items: center;
+      justify-content: center;
+    }
+    .toc-content {
+      width: 90%;
+      max-width: 600px;
+      border-radius: 16px;
+      max-height: 80vh;
+    }
+  }
+  .toc-head {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+  .toc-head .title {
+    font-weight: 600;
+    font-size: 16px;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .toc-head .title::before {
+    content: "";
+    width: 6px;
+    height: 16px;
+    border-radius: 3px;
+    background: #1976d2;
+  }
+  .toc-summary {
+    font-size: 13px;
+    color: #888;
+    margin-left: 16px;
+    flex: 1;
+  }
+  .toc-close {
+    background: none;
+    border: none;
+    font-size: 26px;
+    color: #aaa;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0 4px;
+    transition: color 0.2s;
+  }
+  .toc-close:hover { color: #333; }
+  
+  .legend {
+    display: flex;
+    gap: 16px;
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 12px;
+  }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .legend i { width: 12px; height: 12px; border-radius: 4px; display: inline-block; }
+  i.todo { background: #f1f1f1; border: 1px solid #ddd; }
+  i.right { background: #c8e6c9; border: 1px solid #81c784; }
+  i.wrong { background: #ffcdd2; border: 1px solid #e57373; }
+
+  .toc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(44px, 1fr));
+    gap: 8px;
+    overflow-y: auto;
+    padding-right: 4px;
+    flex: 1;
+  }
+  .toc-btn {
+    padding: 8px 0;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    background: #fafafa;
+    font-size: 13px;
+    cursor: pointer;
+    font-family: inherit;
+    color: #666;
+    transition: 0.12s;
+  }
+  .toc-btn:hover { border-color: #1976d2; color: #1976d2; }
+  .toc-btn.right { background: #e8f5e9; border-color: #a5d6a7; color: #1b5e20; font-weight: 600; }
+  .toc-btn.wrong { background: #ffebee; border-color: #ef9a9a; color: #b71c1c; font-weight: 600; }
+
+  @media(max-width:520px){
+    .stats{gap:16px;}
+    .panel .reset{margin-left:0;}
+    .fab-toc { right: 16px; bottom: 20px; width: 54px; height: 54px; font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>第五十期入党教育培训班 · 真题题库</h1>
+    <div class="sub">统一编号 · 逐题即时判分 · 答题卡悬浮</div>
+    <div class="stats">
+      <div><span>当前题目</span><b id="stat-total">0</b></div>
+      <div><span>已作答</span><b id="stat-done">0</b></div>
+      <div><span>答对</span><b id="stat-right">0</b></div>
+      <div><span>正确率</span><b id="stat-rate">—</b></div>
+    </div>
+  </header>
+
+  <div class="panel">
+    <div class="row">
+      <span class="lbl">练习模式</span>
+      <button data-mode="all" class="active">综合练习</button>
+      <button data-mode="choice">选择题练习</button>
+      <button data-mode="fill">填空题练习</button>
+      <button data-mode="judge">判断题练习</button>
+    </div>
+    <div class="row">
+      <span class="lbl">题库来源</span>
+      <button data-source="all" class="active">全部</button>
+      <button data-source="p1">练习（一）</button>
+      <button data-source="p2">练习（二）</button>
+      <button class="reset" id="resetBtn">重新开始</button>
+    </div>
+  </div>
+
+  <div id="quiz"></div>
+
+  <div class="note">
+    <b>说明：</b>题号已全库统一连续编号；点击右下角“答题卡”可查看整体进度，点击题号即可跳转定位。
+  </div>
+</div>
+
+<!-- 悬浮答题卡按钮 -->
+<button class="fab-toc" id="fabToc">
+  答题卡
+  <span class="fab-badge" id="fabBadge">0/0</span>
+</button>
+
+<!-- 答题卡弹窗 -->
+<div class="toc-modal" id="tocModal">
+  <div class="toc-content">
+    <div class="toc-head">
+      <span class="title">答题卡</span>
+      <span class="toc-summary" id="tocSummary">已做 0/0 · 正确 0 · 错误 0</span>
+      <button class="toc-close" id="tocClose">×</button>
+    </div>
+    <div class="legend">
+      <span><i class="todo"></i>未做</span>
+      <span><i class="right"></i>正确</span>
+      <span><i class="wrong"></i>错误</span>
+    </div>
+    <div class="toc-grid" id="tocGrid"></div>
+  </div>
+</div>
+
+<script>
+/* =====================================================================
+   题库数据（与上一版一致，已去重）
+   ===================================================================== */
+const BANK = {
+  p1: {
+    label: '第五十期入党教育培训班真题练习（一）',
+    choice: [
+      {q:'中国共产党的最高理想和最终目标是（　）。', o:['全面建成小康社会','实现中华民族伟大复兴','实现共产主义','基本实现社会主义现代化'], a:2},
+      {q:'下列不属于党的行动指南的是（　）。', o:['马克思列宁主义','毛泽东思想','习近平新时代中国特色社会主义思想','社会主义市场经济理论'], a:3},
+      {q:'习近平新时代中国特色社会主义思想被确立为党的指导思想，是在（　）。', o:['党的十八大','党的十九大','党的二十大','党的二十届四中全会'], a:1},
+      {q:'中国共产党的根本宗旨是（　）。', o:['为人民服务','全心全意为人民服务','实现共同富裕','为人民谋幸福'], a:1},
+      {q:'党执政兴国的第一要务是（　）。', o:['改革','稳定','发展','创新'], a:2},
+      {q:'我国现阶段社会的主要矛盾是（　）。', o:['人民日益增长的物质文化需要同落后的社会生产之间的矛盾','人民日益增长的美好生活需要和不平衡不充分的发展之间的矛盾','先进的社会制度同落后的生产力之间的矛盾','公有制经济与非公有制经济之间的矛盾'], a:1},
+      {q:'中国共产党在社会主义初级阶段的基本路线的中心是（　）。', o:['政治建设','文化建设','经济建设','社会建设'], a:2},
+      {q:'四项基本原则的核心是（　）。', o:['坚持社会主义道路','坚持人民民主专政','坚持中国共产党的领导','坚持马克思列宁主义毛泽东思想'], a:2},
+      {q:'党的思想路线的核心是（　）。', o:['一切从实际出发','理论联系实际','实事求是','在实践中检验真理和发展真理'], a:2},
+      {q:'党的群众路线的正确表述是（　）。', o:['一切为了群众，一切依靠群众，从群众中来，到群众中去','从群众中来，到群众中去，集中起来，坚持下去','密切联系群众，虚心向群众学习','依靠群众，发动群众，服务群众'], a:0},
+      {q:'“三个代表”重要思想创造性地回答了（　）的问题。', o:['什么是社会主义、怎样建设社会主义','建设什么样的党、怎样建设党','实现什么样的发展、怎样发展','新时代坚持和发展什么样的中国特色社会主义'], a:1},
+      {q:'科学发展观的核心立场是（　）。', o:['全面协调可持续','统筹兼顾','以人为本','推动发展'], a:2},
+      {q:'中国特色社会主义最本质的特征是（　）。', o:['共同富裕','中国共产党的领导','人民当家作主','依法治国'], a:1},
+      {q:'中国特色社会主义制度的最大优势是（　）。', o:['人民当家作主','中国共产党的领导','集中力量办大事','按劳分配为主体'], a:1},
+      {q:'中国共产党人的初心和使命是（　）。', o:['实现共产主义远大理想','为中国人民谋幸福、为中华民族谋复兴','全面建成社会主义现代化强国','建设富强民主文明和谐美丽的现代化国家'], a:1},
+      {q:'伟大建党精神的完整表述是（　）。', o:['坚持真理、坚守理想，践行初心、担当使命，不怕牺牲、英勇斗争，对党忠诚、不负人民','坚定信念、艰苦奋斗，实事求是、敢闯新路','爱国、进步、民主、科学','自力更生、艰苦奋斗，全心全意为人民服务'], a:0},
+      {q:'我国现阶段实行的分配制度是（　）。', o:['按劳分配为主体、多种分配方式并存','按需分配','按资分配为主体','平均分配'], a:0},
+      {q:'我国的根本政治制度是（　）。', o:['人民代表大会制度','中国共产党领导的多党合作和政治协商制度','民族区域自治制度','基层群众自治制度'], a:0},
+      {q:'中华人民共和国的一切权力属于（　）。', o:['中国共产党','全国人民代表大会','人民','国务院'], a:2},
+      {q:'申请入党的最低年龄是（　）。', o:['16岁','18岁','20岁','22岁'], a:1},
+      {q:'下列人员中，可以申请加入中国共产党的是（　）。', o:['未满18周岁的中学生','承认党的纲领和章程、愿意参加党的一个组织并积极工作、执行党的决议和按期交纳党费的年满18岁知识分子','持有外国国籍的华裔企业家','不愿参加党的组织生活的退休人员'], a:1},
+      {q:'党章规定的党员义务一共有（　）。', o:['6项','7项','8项','9项'], a:2},
+      {q:'党章规定的党员权利一共有（　）。', o:['6项','7项','8项','9项'], a:2},
+      {q:'下列不属于党员义务的是（　）。', o:['认真学习马克思列宁主义、毛泽东思想、邓小平理论、“三个代表”重要思想、科学发展观、习近平新时代中国特色社会主义思想','坚持党和人民的利益高于一切，个人利益服从党和人民的利益，吃苦在前，享受在后，克己奉公，多做贡献','参加党的有关会议，阅读党的有关文件，接受党的教育和培训','自觉遵守党的纪律，首先是党的政治纪律和政治规矩'], a:2},
+      {q:'下列不属于党员权利的是（　）。', o:['参加党的有关会议，阅读党的有关文件，接受党的教育和培训','对党的工作提出建议和倡议','行使表决权、选举权，有被选举权','向党组织交纳党费'], a:3},
+      {q:'党员对党的决议和政策有不同意见时，正确的做法是（　）。', o:['拒绝执行，并公开发表反对意见','在坚决执行的前提下，可以声明保留，并且可以把自己的意见向党的上级组织直至中央提出','先在党内少数人中串联，形成反对意见','直接向上级党委提出辞职'], a:1},
+      {q:'党员如果发现党组织或党的领导干部有违纪违法行为，应当（　）。', o:['装作不知道，明哲保身','只向身边同事私下议论','按照规定程序向党组织反映，或通过信访、举报渠道如实检举','在网络上公开发帖曝光'], a:2},
+      {q:'党员必须自觉遵守党的纪律，首先是（　）。', o:['组织纪律','政治纪律和政治规矩','廉洁纪律','群众纪律'], a:1},
+      {q:'党员应当发扬社会主义新风尚，带头实践（　）。', o:['社会主义核心价值观和社会主义荣辱观','个人主义价值观','享乐主义生活方式','自由主义思想'], a:0},
+      {q:'党员有义务切实开展（　），勇于揭露和纠正违反党的原则的言行。', o:['调查研究','批评和自我批评','民主协商','党内选举'], a:1},
+      {q:'党员有义务为了保护国家和人民的利益，在一切困难和危险的时刻（　）。', o:['挺身而出，英勇斗争，不怕牺牲','先行撤离，保全自己','等待组织安排','视情况而定'], a:0},
+      {q:'党员在党内监督方面的权利是（　）。', o:['有权对任何党组织和党员提出批评、揭发、检举和控告，并要求有关组织给以负责的答复','有权随意查阅党内所有涉密文件','有权否决党组织的决定','有权不接受组织的监督'], a:0},
+      {q:'发展党员必须把（　）放在首位。', o:['业务能力','学历层次','政治标准','社会关系'], a:2},
+      {q:'发展党员工作的总要求是（　）。', o:['坚持标准、保证质量、改善结构、慎重发展','控制总量、优化结构、提高质量、发挥作用','严格程序、保证质量、突出重点、均衡发展','个别吸收、成熟一个发展一个'], a:1},
+      {q:'发展党员工作的原则是（　）。', o:['成批吸收','个别吸收','集体吸收','推荐吸收'], a:1},
+      {q:'预备党员的预备期为（　）。', o:['半年','一年','一年半','两年'], a:1},
+      {q:'预备党员的预备期从（　）算起。', o:['递交入党申请书之日','确定为入党积极分子之日','支部大会通过其为预备党员之日','上级党委审批之日'], a:2},
+      {q:'党员的党龄从（　）算起。', o:['递交入党申请书之日','支部大会通过其为预备党员之日','预备期满转为正式党员之日','上级党委审批转正之日'], a:2},
+      {q:'预备党员不具有的权利是（　）。', o:['参加党的有关会议','对党的工作提出建议和倡议','表决权、选举权和被选举权','接受党的教育和培训'], a:2},
+      {q:'党员如果没有正当理由，连续（　）不参加党的组织生活，或不交纳党费，或不做党所分配的工作，就被认为是自行脱党。', o:['三个月','六个月','九个月','一年'], a:1},
+      {q:'预备党员预备期满需要继续考察和教育的，可以延长一次预备期，最长不超过（　）。', o:['半年','一年','一年半','两年'], a:1},
+      {q:'党的根本组织原则是（　）。', o:['民主集中制','集体领导制','首长负责制','少数服从多数制'], a:0},
+      {q:'民主集中制“四个服从”中，表述正确的是（　）。', o:['党员个人服从党的组织，少数服从多数，下级组织服从上级组织，全党各个组织和全体党员服从党的全国代表大会和中央委员会','党的组织服从党员个人，多数服从少数','下级组织独立于上级组织','全党各个组织服从地方党委'], a:0},
+      {q:'党的各级领导机关，除它们派出的代表机关和在非党组织中的党组外，都由（　）产生。', o:['上级任命','群众推荐','选举','抽签'], a:2},
+      {q:'凡属重大问题，都要按照集体领导、民主集中、个别酝酿、（　）的原则，由党的委员会集体讨论、作出决定。', o:['个人决定','会议决定','上级批准','群众评议'], a:1},
+      {q:'党的全国代表大会每（　）举行一次。', o:['三年','四年','五年','六年'], a:2},
+      {q:'党的中央委员会每届任期（　）。', o:['三年','四年','五年','六年'], a:2},
+      {q:'成立党的基层组织，需要有正式党员（　）以上。', o:['二人','三人','五人','七人'], a:1},
+      {q:'党的基层委员会、总支部委员会、支部委员会每届任期（　）。', o:['两年至三年','三年至五年','五年至七年','两年'], a:1},
+      {q:'党的基础组织是（　）。', o:['党的基层委员会','党支部','党小组','党组'], a:1}
+    ],
+    fill: [
+      {q:'中国共产党是中国特色社会主义事业的____。', ans:['领导核心']},
+      {q:'中国共产党代表中国先进____的发展要求，代表中国先进文化的前进方向，代表中国最广大人民的根本利益。', ans:['生产力']},
+      {q:'中国共产党以马克思列宁主义、毛泽东思想、邓小平理论、“三个代表”重要思想、科学发展观、____作为自己的行动指南。', ans:['习近平新时代中国特色社会主义思想']},
+      {q:'我国社会主要矛盾已经转化为人民日益增长的____需要和____的发展之间的矛盾。', ans:['美好生活','不平衡不充分']},
+      {q:'坚持社会主义道路、坚持人民民主专政、坚持中国共产党的领导、坚持马克思列宁主义毛泽东思想，这四项基本原则是我们的____。', ans:['立国之本']},
+      {q:'党的群众路线是一切为了群众，一切依靠群众，____，到群众中去。', ans:['从群众中来']},
+      {q:'党章指出，中国共产党要领导全国各族人民实现第二个百年奋斗目标、实现中华民族伟大复兴的____。', ans:['中国梦']},
+      {q:'中国共产党在社会主义初级阶段的基本路线概括为“一个中心、____”。', ans:['两个基本点']},
+      {q:'中国共产党的初心和使命是____、为中华民族谋复兴。', ans:['为中国人民谋幸福']},
+      {q:'伟大建党精神的内涵是坚持真理、坚守理想，践行初心、担当使命，不怕牺牲、英勇斗争，____、不负人民。', ans:['对党忠诚']},
+      {q:'现阶段我国的统一战线是由中国共产党领导的，由各民主党派和各人民团体参加的，包括全体社会主义劳动者、社会主义事业的建设者、拥护社会主义的爱国者、____和致力于中华民族伟大复兴的爱国者的广泛的爱国统一战线。', ans:['拥护祖国统一']},
+      {q:'党章规定，党的领导主要是____、思想和组织的领导。', ans:['政治']},
+      {q:'中国共产党的党旗为缀有金黄色____图案的红旗。', ans:['党徽']},
+      {q:'党章现行文本由中国共产党第二十次全国代表大会于____年部分修改并通过。', ans:['2022']},
+      {q:'现行《中国共产党章程》除总纲外，共____章、五十五条。', ans:['十一']},
+      {q:'申请入党的人，必须承认党的____和章程。', ans:['纲领']},
+      {q:'申请入党的人，必须愿意参加党的一个组织并在其中积极工作、执行党的____和按期交纳党费。', ans:['决议']},
+      {q:'党章规定的党员权利共有____项。', ans:['八']},
+      {q:'党员有权参加党的有关会议，阅读党的有关文件，接受____。', ans:['党的教育和培训']}
+    ],
+    judge: [
+      {q:'中国共产党是中国特色社会主义事业的领导核心。', a:true},
+      {q:'党的最高理想和最终目标是实现中华民族伟大复兴。', a:false},
+      {q:'中国共产党的行动指南包括马克思列宁主义、毛泽东思想、邓小平理论、“三个代表”重要思想、科学发展观、习近平新时代中国特色社会主义思想。', a:true},
+      {q:'习近平新时代中国特色社会主义思想是在党的十八大上被确立为党的指导思想的。', a:false},
+      {q:'党执政兴国的第一要务是改革。', a:false},
+      {q:'发展是党执政兴国的第一要务。', a:true},
+      {q:'四项基本原则是我们的强国之路。', a:false},
+      {q:'四项基本原则是我们的立国之本。', a:true},
+      {q:'党的思想路线的核心是实事求是。', a:true},
+      {q:'党的群众路线是“一切为了群众，一切依靠群众，从群众中来，到群众中去”。', a:true},
+      {q:'党的领导主要是政治、思想和组织的领导。', a:true},
+      {q:'中国共产党的党旗为缀有金黄色党徽图案的红旗。', a:true},
+      {q:'现行《中国共产党章程》是党的二十大于2022年部分修改并通过的。', a:true},
+      {q:'申请入党的人必须年满十八岁。', a:true},
+      {q:'申请入党的人必须年满十六岁。', a:false},
+      {q:'申请入党的人必须愿意按期交纳党费。', a:true},
+      {q:'党章规定党员义务共有八项。', a:true},
+      {q:'党章规定党员权利共有八项。', a:true},
+      {q:'党员有权参加党的有关会议，阅读党的有关文件，接受党的教育和培训。', a:true},
+      {q:'党员对党的决议和政策如有不同意见，可以拒不执行。', a:false},
+      {q:'党员有义务自觉遵守党的纪律，首先是党的政治纪律和政治规矩。', a:true},
+      {q:'党员有义务切实开展批评和自我批评。', a:true},
+      {q:'党员可以在任何场合随意公开发表与党中央不一致的言论。', a:false},
+      {q:'党员有权利在党的会议上批评党的任何组织和任何党员，但必须有根据地。', a:true},
+      {q:'预备党员享有表决权、选举权和被选举权。', a:false}
+    ]
+  },
+
+  p2: {
+    label: '第五十期入党教育培训班真题练习（二）',
+    choice: [
+      {q:'中国共产主义青年团是党的（　）。', o:['助手和后备军','分支机构','外围组织','监督机构'], a:0},
+      {q:'党的最高领导机关是（　）。', o:['党的全国代表大会和它所产生的中央委员会','中央政治局','中央书记处','中央纪律检查委员会'], a:0},
+      {q:'党的各级纪律检查委员会是（　）。', o:['党内监督专责机关','党内决策机关','党内立法机关','党内咨询机构'], a:0},
+      {q:'党的中央纪律检查委员会在（　）领导下进行工作。', o:['中央政治局','党的中央委员会','全国人民代表大会','中央书记处'], a:1},
+      {q:'党的纪律处分共有（　）。', o:['三种','四种','五种','六种'], a:2},
+      {q:'下列不属于党的纪律处分种类的是（　）。', o:['警告','严重警告','撤销党内职务','行政拘留'], a:3},
+      {q:'党内最高处分是（　）。', o:['留党察看','撤销党内职务','开除党籍','严重警告'], a:2},
+      {q:'留党察看最长不超过（　）。', o:['一年','两年','三年','四年'], a:1},
+      {q:'党员在留党察看期间没有（　）。', o:['参加组织生活的权利','表决权、选举权和被选举权','交纳党费的义务','接受教育的权利'], a:1},
+      {q:'党的纪律中最重要、最根本、最关键的纪律是（　）。', o:['政治纪律','组织纪律','廉洁纪律','生活纪律'], a:0},
+      {q:'党的纪律主要包括政治纪律、组织纪律、廉洁纪律、群众纪律、工作纪律和（　）。', o:['保密纪律','生活纪律','财经纪律','宣传纪律'], a:1},
+      {q:'党组织对党员作出处分决定，应当（　）。', o:['由书记一人决定即可','实事求是地查清事实，处分决定所依据的事实材料和处分决定必须同本人见面，听取本人说明和申辩','不必告知本人','由群众投票决定'], a:1},
+      {q:'受到警告处分的党员，（　）内不得在党内提升职务。', o:['半年','一年','一年半','两年'], a:1},
+      {q:'入党申请人应当向（　）提出入党申请。', o:['工作、学习所在单位党组织；没有工作、学习单位或单位未建立党组织的，向居住地党组织提出','户籍所在地派出所','上级党委直接提出','所在社区居委会'], a:0},
+      {q:'党组织收到入党申请书后，应当在（　）内派人同入党申请人谈话。', o:['半个月','一个月','三个月','半年'], a:1},
+      {q:'确定入党积极分子，应当采取党员推荐、群团组织推优等方式产生人选，由（　）研究决定。', o:['上级党委','支部委员会（不设支部委员会的由支部大会）','党小组','培养联系人'], a:1},
+      {q:'党组织应当指定（　）正式党员作为入党积极分子的培养联系人。', o:['一名','一至两名','三名','三名以上'], a:1},
+      {q:'入党积极分子经过党组织（　）以上的培养教育和考察，才可列为发展对象。', o:['半年','一年','两年','三年'], a:1},
+      {q:'发展对象应当有（　）正式党员作为入党介绍人。', o:['一名','两名','三名','四名'], a:1},
+      {q:'对发展对象进行短期集中培训，培训时间一般不少于（　）。', o:['一天或8个学时','三天或24个学时','五天或40个学时','一周'], a:1},
+      {q:'支部大会讨论接收预备党员，采取（　）方式进行表决。', o:['举手','无记名投票','记名投票','口头询问'], a:1},
+      {q:'支部大会讨论接收预备党员时，赞成人数须超过（　），才能通过决议。', o:['应到会有表决权正式党员的半数','到会有表决权正式党员的三分之一','支部全体党员的半数','上级党委指定的比例'], a:0},
+      {q:'预备党员必须面向（　）进行入党宣誓。', o:['党旗','国旗','党徽','入党志愿书'], a:0},
+      {q:'预备党员转正，应当由（　）讨论通过和上级党组织批准。', o:['党小组会','支部党员大会','支部委员会','党委组织部'], a:1},
+      {q:'预备党员预备期满，应提前（　）向党支部提出书面转正申请。', o:['一周','半个月','一个月','三个月'], a:2},
+      {q:'党员每月工资收入（税后）在5000元以上至10000元（含10000元）者，交纳党费的比例是（　）。', o:['0.5%','1%','1.5%','2%'], a:2},
+      {q:'“三会一课”中的“一课”是指（　）。', o:['政治课','党课','业务课','法治课'], a:1},
+      {q:'支部党员大会一般（　）召开一次。', o:['每月','每季度','每半年','每年'], a:1},
+      {q:'党支部委员会会议一般（　）召开一次。', o:['每周','每月','每季度','每半年'], a:1},
+      {q:'党支部每年至少召开（　）组织生活会。', o:['一次','两次','三次','四次'], a:0},
+      {q:'民主评议党员一般（　）开展一次。', o:['每季度','每半年','每年','每两年'], a:2},
+      {q:'党员变动工作单位后，应当及时办理（　）。', o:['户籍迁移','党员组织关系转移','档案封存','重新入党'], a:1},
+      {q:'党员无正当理由连续六个月不交纳党费，应当（　）。', o:['补交即可，不作处理','按自行脱党处理','给予留党察看处分','自动保留党籍'], a:1},
+      {q:'中国共产党第一次全国代表大会召开的时间是（　）。', o:['1919年5月','1921年7月','1927年8月','1949年10月'], a:1},
+      {q:'中国共产党成立纪念日是每年的（　）。', o:['7月1日','8月1日','10月1日','5月1日'], a:0},
+      {q:'中华人民共和国成立的时间是（　）。', o:['1945年8月15日','1949年10月1日','1956年12月','1978年12月'], a:1},
+      {q:'标志着中国共产党开始独立领导革命战争和创建人民军队的事件是（　）。', o:['秋收起义','南昌起义','广州起义','百色起义'], a:1},
+      {q:'事实上确立了毛泽东同志在党中央和红军领导地位的会议是（　）。', o:['八七会议','古田会议','遵义会议','瓦窑堡会议'], a:2},
+      {q:'党的十一届三中全会召开于（　），开启了改革开放新时期。', o:['1976年10月','1978年12月','1982年9月','1992年春'], a:1},
+      {q:'中国共产党第二十次全国代表大会召开的时间是（　）。', o:['2017年10月','2021年7月','2022年10月','2023年3月'], a:2},
+      {q:'党的二十大报告指出，从现在起，中国共产党的中心任务是（　）。', o:['全面建成小康社会','团结带领全国各族人民全面建成社会主义现代化强国、实现第二个百年奋斗目标，以中国式现代化全面推进中华民族伟大复兴','实现第一个百年奋斗目标','完成祖国统一大业'], a:1},
+      {q:'“两个确立”的内容是（　）。', o:['确立中国特色社会主义道路，确立社会主义市场经济体制','确立习近平同志党中央的核心、全党的核心地位，确立习近平新时代中国特色社会主义思想的指导地位','确立全面深化改革目标，确立全面依法治国目标','确立新发展理念，确立新发展格局'], a:1},
+      {q:'“两个维护”是指（　）。', o:['维护国家统一，维护民族团结','坚决维护习近平总书记党中央的核心、全党的核心地位，坚决维护以习近平同志为核心的党中央权威和集中统一领导','维护社会稳定，维护经济发展','维护党章权威，维护党纪严肃性'], a:1},
+      {q:'“四个意识”不包括（　）。', o:['政治意识','大局意识','核心意识','忧患意识'], a:3},
+      {q:'“四个自信”是指道路自信、理论自信、制度自信和（　）。', o:['文化自信','军事自信','科技自信','经济自信'], a:0},
+      {q:'新发展理念的内容是（　）。', o:['富强、民主、文明、和谐','创新、协调、绿色、开放、共享','自由、平等、公正、法治','爱国、敬业、诚信、友善'], a:1},
+      {q:'“三个务必”不包括（　）。', o:['务必不忘初心、牢记使命','务必谦虚谨慎、艰苦奋斗','务必敢于斗争、善于斗争','务必自力更生、艰苦奋斗'], a:3},
+      {q:'中国共产党区别于其他政党的显著标志是（　）。', o:['有自己的军队','勇于自我革命','党员人数众多','有严密的组织体系'], a:1},
+      {q:'“两个务必”是在（　）上提出的。', o:['党的七届二中全会','党的八大','党的十一届三中全会','党的十九大'], a:0},
+      {q:'党的三大优良作风不包括（　）。', o:['理论联系实际','密切联系群众','批评和自我批评','艰苦奋斗'], a:3}
+    ],
+    fill: [
+      {q:'党员有义务自觉遵守党的纪律，首先是党的____纪律和政治规矩。', ans:['政治']},
+      {q:'党员有义务维护党的团结和统一，对党忠诚老实，____，反对阳奉阴违的两面派行为和一切阴谋诡计。', ans:['言行一致']},
+      {q:'党员有义务切实开展____，勇于揭露和纠正违反党的原则的言行和工作中的缺点、错误，坚决同消极腐败现象作斗争。', ans:['批评和自我批评']},
+      {q:'党员有义务为了保护国家和人民的利益，在一切困难和危险的时刻____，英勇斗争，不怕牺牲。', ans:['挺身而出']},
+      {q:'党员对党的决议和政策如有不同意见，在坚决执行的前提下，可以声明保留，并且可以把自己的意见向党的上级组织直至____提出。', ans:['中央']},
+      {q:'党员有义务自觉遵守____，模范遵守国家的法律法规，严格保守党和国家的秘密。', ans:['党的纪律']},
+      {q:'入党誓词中，“对党忠诚，积极工作，为共产主义奋斗终身，随时准备为党和人民____，永不叛党”。', ans:['牺牲一切']},
+      {q:'预备党员的预备期一般为____年。', ans:[['一','1']]},
+      {q:'预备党员的预备期，从____通过他为预备党员之日算起。', ans:['支部大会']},
+      {q:'党员的党龄，从预备期满转为____之日算起。', ans:['正式党员']},
+      {q:'预备党员预备期满，需要继续考察和教育的，可以延长一次预备期，延长时间不能少于半年，最长不超过____年。', ans:[['一','1']]},
+      {q:'党员如果没有____，连续六个月不参加党的组织生活，或不交纳党费，或不做党所分配的工作，就被认为是自行脱党。', ans:['正当理由']},
+      {q:'发展党员，必须把____放在首位，经过党的支部，坚持个别吸收的原则。', ans:['政治标准']},
+      {q:'发展党员工作的总要求是控制总量、____、提高质量、发挥作用。', ans:['优化结构']},
+      {q:'民主集中制的“四个服从”中，____服从多数，是全党必须遵守的重要原则。', ans:['少数']},
+      {q:'民主集中制的“四个服从”中，全党各个组织和全体党员服从党的全国代表大会和____。', ans:['中央委员会']},
+      {q:'党的各级领导机关，除它们派出的代表机关和在非党组织中的党组外，都由____产生。', ans:['选举']},
+      {q:'凡属重大问题，都要按照集体领导、民主集中、____、会议决定的原则，由党的委员会集体讨论、作出决定。', ans:['个别酝酿']},
+      {q:'党的全国代表大会每____年举行一次，由中央委员会召集。', ans:[['五','5']]},
+      {q:'党的省、自治区、直辖市、设区的市和自治州的委员会，每届任期____年。', ans:[['五','5']]}
+    ],
+    judge: [
+      {q:'入党介绍人可以由预备党员担任。', a:false},
+      {q:'预备党员的预备期为一年。', a:true},
+      {q:'预备党员的预备期从支部大会通过其为预备党员之日算起。', a:true},
+      {q:'党员的党龄从预备期满转为正式党员之日算起。', a:true},
+      {q:'党员的党龄从支部大会通过其为预备党员之日算起。', a:false},
+      {q:'预备党员的权利同正式党员完全一样。', a:false},
+      {q:'预备党员预备期满，需要继续考察和教育的，可以延长一次预备期。', a:true},
+      {q:'党员如果没有正当理由，连续六个月不参加党的组织生活，就被认为是自行脱党。', a:true},
+      {q:'党员有退党的自由。', a:true},
+      {q:'发展党员必须把业务能力放在首位。', a:false},
+      {q:'发展党员工作的总要求是“控制总量、优化结构、提高质量、发挥作用”。', a:true},
+      {q:'发展党员可以成批吸收，不必坚持个别吸收原则。', a:false},
+      {q:'党的根本组织原则是民主集中制。', a:true},
+      {q:'“四个服从”要求少数服从多数。', a:true},
+      {q:'“四个服从”要求多数服从少数。', a:false},
+      {q:'凡属重大问题，都要按照集体领导、民主集中、个别酝酿、会议决定的原则作出决定。', a:true},
+      {q:'党的各级委员会实行集体领导和个人分工负责相结合的制度。', a:true},
+      {q:'党组是党的一级领导机关，可以自行发展党员。', a:false},
+      {q:'党的干部是党的事业的骨干，是人民的公仆。', a:true},
+      {q:'党的纪律是党的各级组织和全体党员必须遵守的行为规则。', a:true}
+    ]
+  }
+};
+
+/* =====================================================================
+   全局统一编号：p1 选择 → p1 填空 → p1 判断 → p2 选择 → p2 填空 → p2 判断
+   ===================================================================== */
+const ALL = [];
+(function buildAll(){
+  let no = 0;
+  ['p1','p2'].forEach(bank => {
+    ['choice','fill','judge'].forEach(type => {
+      BANK[bank][type].forEach((item, i) => {
+        no++;
+        ALL.push({
+          no, bank, type, i, item,
+          key: bank + '-' + type + '-' + i
+        });
+      });
+    });
+  });
+})();
+
+/* ========== 状态与筛选 ========== */
+const state = {};
+const filter = {mode:'all', source:'all'};
+
+function esc(s){
+  return String(s==null?'':s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+}
+function norm(s){
+  return String(s==null?'':s)
+    .replace(/\s+/g,'')
+    .replace(/[，。、；：""''（）()《》〈〉\[\]【】,.;:!?！？"'_\-—–%％]/g,'')
+    .toLowerCase();
+}
+
+/* ========== 单张卡片 HTML ========== */
+function buildCardHTML(it, st){
+  const {type, item, no, key} = it;
+  const typeName = {choice:'单项选择', fill:'填空题', judge:'判断题'}[type];
+  let body = '';
+
+  if (type === 'choice'){
+    body = '<div class="options">';
+    item.o.forEach((o, j) => {
+      let cls = 'opt';
+      if (st){
+        if (j === item.a) cls += ' ok';
+        else if (j === st.pick) cls += ' bad';
+      }
+      body += `<button class="${cls}" data-j="${j}"${st?' disabled':''}><b>${'ABCD'[j]}.</b> ${esc(o)}</button>`;
+    });
+    body += '</div>';
+  }
+  else if (type === 'judge'){
+    body = '<div class="options judge">';
+    [true, false].forEach(v => {
+      let cls = 'opt';
+      if (st){
+        if (v === item.a) cls += ' ok';
+        else if (v === st.pick) cls += ' bad';
+      }
+      body += `<button class="${cls}" data-v="${v}"${st?' disabled':''}>${v?'√ 正确':'× 错误'}</button>`;
+    });
+    body += '</div>';
+  }
+  else {
+    const parts = item.q.split(/(_{3,})/);
+    let bi = 0;
+    body = '<div class="fillq">';
+    parts.forEach(p => {
+      if (/^_{3,}$/.test(p)){
+        let cls = 'blank';
+        if (st) cls += st.oks[bi] ? ' ok' : ' bad';
+        const val = st ? (st.vals[bi] || '') : '';
+        body += `<input class="${cls}" data-b="${bi}" value="${esc(val)}"${st?' disabled':''} autocomplete="off">`;
+        bi++;
+      } else {
+        body += esc(p);
+      }
+    });
+    body += '</div>';
+    if (!st) body += '<button class="submit" data-act="submit-fill">提交答案</button>';
+  }
+
+  let fb = '';
+  if (st){
+    if (type === 'fill'){
+      if (st.ok){
+        fb = '<div class="fb right">✅ 回答正确</div>';
+      } else {
+        const ansText = item.ans.map((a, idx) => {
+          const accept = Array.isArray(a) ? a : [a];
+          const label = item.ans.length > 1 ? `第${idx+1}空：` : '';
+          return label + accept.join(' 或 ');
+        }).join('；');
+        fb = `<div class="fb wrong">❌ 回答错误，正确答案：<b>${esc(ansText)}</b></div>`;
+      }
+    } else if (st.ok){
+      fb = '<div class="fb right">✅ 回答正确</div>';
+    } else {
+      const ansText = type === 'choice'
+        ? 'ABCD'[item.a] + '. ' + item.o[item.a]
+        : (item.a ? '正确' : '错误');
+      fb = `<div class="fb wrong">❌ 回答错误，正确答案：<b>${esc(ansText)}</b></div>`;
+    }
+  }
+
+  return `<div class="card" data-key="${key}" data-bank="${it.bank}" data-type="${type}" data-i="${it.i}">
+    <div class="qhead">
+      <span class="tag ${type}">${typeName}</span>
+      <span class="num">第 ${no} 题</span>
+    </div>
+    ${type === 'fill' ? '' : `<div class="qtext">${esc(item.q)}</div>`}
+    ${body}
+    ${fb}
+  </div>`;
+}
+
+/* ========== 当前筛选列表 ========== */
+function currentList(){
+  return ALL.filter(it =>
+    (filter.source === 'all' || filter.source === it.bank) &&
+    (filter.mode === 'all' || filter.mode === it.type)
+  );
+}
+
+/* ========== 渲染题目 + 答题卡 ========== */
+function render(){
+  const list = currentList();
+  const wrap = document.getElementById('quiz');
+  wrap.innerHTML = list.map(it => buildCardHTML(it, state[it.key])).join('')
+    || '<p class="empty">没有符合条件的题目</p>';
+  renderToc(list);
+  updateStats();
+}
+
+function renderToc(list){
+  const grid = document.getElementById('tocGrid');
+  grid.innerHTML = list.map(it => {
+    const st = state[it.key];
+    let cls = 'toc-btn';
+    if (st) cls += st.ok ? ' right' : ' wrong';
+    return `<button class="${cls}" data-key="${it.key}" title="第 ${it.no} 题">${it.no}</button>`;
+  }).join('');
+}
+
+function updateTocStates(){
+  document.querySelectorAll('.toc-btn').forEach(btn => {
+    const st = state[btn.dataset.key];
+    btn.classList.toggle('right', !!(st && st.ok));
+    btn.classList.toggle('wrong', !!(st && !st.ok));
+  });
+}
+
+/* ========== 替换单张卡片 ========== */
+function refreshCard(card){
+  const key = card.dataset.key;
+  const it = ALL.find(x => x.key === key);
+  if (!it) return;
+  const tmp = document.createElement('div');
+  tmp.innerHTML = buildCardHTML(it, state[key]);
+  card.replaceWith(tmp.firstElementChild);
+  updateTocStates();
+  updateStats();
+}
+
+/* ========== 统计更新 ========== */
+function updateStats(){
+  const cards = [...document.querySelectorAll('.card')];
+  let done = 0, right = 0;
+  cards.forEach(c => {
+    const st = state[c.dataset.key];
+    if (st){ done++; if (st.ok) right++; }
+  });
+  const total = cards.length;
+  const wrong = done - right;
+  const rate = done ? Math.round(right / done * 100) + '%' : '—';
+
+  document.getElementById('stat-total').textContent = total;
+  document.getElementById('stat-done').textContent  = done;
+  document.getElementById('stat-right').textContent = right;
+  document.getElementById('stat-rate').textContent  = rate;
+
+  // 更新悬浮按钮角标和弹窗统计
+  document.getElementById('fabBadge').textContent = `${done}/${total}`;
+  document.getElementById('tocSummary').textContent = `已做 ${done}/${total} · 正确 ${right} · 错误 ${wrong}`;
+}
+
+/* ========== 作答交互 ========== */
+document.getElementById('quiz').addEventListener('click', e => {
+  const card = e.target.closest('.card');
+  if (!card) return;
+  const key = card.dataset.key;
+  if (state[key]) return;
+  const it = ALL.find(x => x.key === key);
+  if (!it) return;
+  const {type, item} = it;
+
+  if (type === 'choice'){
+    const btn = e.target.closest('.opt');
+    if (!btn) return;
+    const j = +btn.dataset.j;
+    state[key] = {ok: j === item.a, pick: j};
+    refreshCard(card);
+  }
+  else if (type === 'judge'){
+    const btn = e.target.closest('.opt');
+    if (!btn) return;
+    const v = btn.dataset.v === 'true';
+    state[key] = {ok: v === item.a, pick: v};
+    refreshCard(card);
+  }
+  else if (type === 'fill'){
+    const btn = e.target.closest('[data-act="submit-fill"]');
+    if (!btn) return;
+    const inputs = [...card.querySelectorAll('.blank')];
+    const vals = inputs.map(x => x.value.trim());
+    const oks = inputs.map((input, bi) => {
+      const ans = item.ans[bi];
+      if (ans === undefined) return false;
+      const accept = Array.isArray(ans) ? ans : [ans];
+      return accept.some(a => norm(a) === norm(vals[bi]));
+    });
+    state[key] = {ok: oks.every(Boolean), oks, vals};
+    refreshCard(card);
+  }
+});
+
+document.getElementById('quiz').addEventListener('keydown', e => {
+  if (e.key === 'Enter' && e.target.classList && e.target.classList.contains('blank')){
+    const card = e.target.closest('.card');
+    if (!card) return;
+    const btn = card.querySelector('[data-act="submit-fill"]');
+    if (btn) btn.click();
+  }
+});
+
+/* ========== 答题卡弹窗逻辑 ========== */
+const fabToc = document.getElementById('fabToc');
+const tocModal = document.getElementById('tocModal');
+const tocClose = document.getElementById('tocClose');
+
+fabToc.addEventListener('click', () => {
+  tocModal.classList.add('show');
+});
+
+function closeToc() {
+  tocModal.classList.remove('show');
+}
+
+tocClose.addEventListener('click', closeToc);
+tocModal.addEventListener('click', (e) => {
+  if (e.target === tocModal) closeToc();
+});
+
+document.getElementById('tocGrid').addEventListener('click', e => {
+  const btn = e.target.closest('.toc-btn');
+  if (!btn) return;
+  const key = btn.dataset.key;
+  const card = document.querySelector(`.card[data-key="${key}"]`);
+  if (!card) return;
+
+  closeToc();
+
+  // 稍作延迟等待弹窗关闭动画，再滚动页面
+  setTimeout(() => {
+    const cardRect = card.getBoundingClientRect();
+    const targetY = Math.max(0, window.scrollY + cardRect.top - 20);
+    window.scrollTo({top: targetY, behavior:'smooth'});
+
+    card.classList.remove('flash');
+    void card.offsetWidth;
+    card.classList.add('flash');
+    setTimeout(() => card.classList.remove('flash'), 1600);
+  }, 250);
+});
+
+/* ========== 筛选切换 ========== */
+document.querySelectorAll('[data-mode]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('[data-mode]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    filter.mode = btn.dataset.mode;
+    render();
+  });
+});
+document.querySelectorAll('[data-source]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('[data-source]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    filter.source = btn.dataset.source;
+    render();
+  });
+});
+
+/* ========== 重新开始 ========== */
+document.getElementById('resetBtn').addEventListener('click', () => {
+  if (!confirm('确定要清空所有作答记录，重新开始吗？')) return;
+  Object.keys(state).forEach(k => delete state[k]);
+  closeToc();
+  render();
+  window.scrollTo({top:0, behavior:'smooth'});
+});
+
+render();
+</script>
+</body>
+</html>
