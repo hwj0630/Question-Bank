@@ -2,46 +2,104 @@
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>信息工程学院党培题库（自动判分 · 按题型筛选）</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>信息工程学院党培题库（实时判分版）</title>
 <style>
-  body{font-family:"Microsoft YaHei",Arial,sans-serif;background:#f5f7fb;margin:0;padding:20px;color:#222}
-  h1{text-align:center;font-size:22px;margin:10px 0 16px}
-  .filter-bar{max-width:900px;margin:0 auto 12px;display:flex;gap:8px;flex-wrap:wrap}
-  .filter{padding:8px 16px;border:1px solid #cfd8e3;border-radius:8px;background:#fff;color:#2563eb;font-size:14px;cursor:pointer}
-  .filter.active{background:#2563eb;color:#fff;border-color:#2563eb}
+  body{font-family:"Microsoft YaHei",Arial,sans-serif;background:#f5f7fb;margin:0;padding:20px 20px 100px;color:#222}
+  h1{text-align:center;font-size:22px;margin:10px 0 20px}
   #quiz{max-width:900px;margin:0 auto}
-  .q{background:#fff;border:1px solid #dfe5ef;border-radius:10px;padding:14px 16px;margin:12px 0;box-shadow:0 2px 6px rgba(0,0,0,.04)}
+  .q{background:#fff;border:1px solid #dfe5ef;border-radius:10px;padding:14px 16px;margin:12px 0;box-shadow:0 2px 6px rgba(0,0,0,.04);transition:all 0.3s ease;scroll-margin-top:20px}
+  
+  /* 题目状态边框 */
+  .q-correct{border-color:#10b981 !important;background:#f0fdf4}
+  .q-wrong{border-color:#ef4444 !important;background:#fef2f2}
+
   .qt{font-weight:600;line-height:1.7;margin-bottom:8px}
   label{display:block;line-height:1.9;cursor:pointer}
   input[type=text]{width:96%;padding:8px 10px;border:1px solid #cfd8e3;border-radius:6px;font-size:14px;margin-top:6px}
+  input[type=text]:disabled{background:#f3f4f6;color:#6b7280;cursor:not-allowed}
+  input[type=radio]:disabled, input[type=checkbox]:disabled {cursor: not-allowed;}
+  
   .fb{margin-top:8px;font-size:14px;padding:6px 8px;border-radius:6px;display:none}
   .fb.ok{display:block;background:#e8f8ee;color:#137333;border:1px solid #b7e1c1}
   .fb.bad{display:block;background:#fdecea;color:#b3261e;border:1px solid #f5c2c0}
-  .bar{position:sticky;bottom:0;background:#f5f7fb;max-width:900px;margin:0 auto;padding:12px 0;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-  button{padding:10px 18px;border:0;border-radius:8px;background:#2563eb;color:#fff;font-size:15px;cursor:pointer}
+  
+  .bar{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #dfe5ef;padding:12px 20px;display:flex;gap:10px;align-items:center;justify-content:center;z-index:90;box-shadow:0 -2px 10px rgba(0,0,0,.05)}
+  button{padding:10px 18px;border:0;border-radius:8px;background:#2563eb;color:#fff;font-size:15px;cursor:pointer;outline:none}
   button.ghost{background:#64748b}
-  #score{font-weight:700;color:#111}
+  button:active{opacity:0.8}
   .tag{display:inline-block;font-size:12px;color:#2563eb;background:#e8efff;border-radius:4px;padding:1px 6px;margin-right:6px}
+  
+  .confirm-btn{margin-top:12px;padding:6px 16px;background:#2563eb;border-radius:6px;font-size:14px;color:#fff;border:none;cursor:pointer;display:inline-block}
+
+  /* 答题卡悬浮按钮 */
+  #card-btn{position:fixed;right:20px;bottom:80px;width:56px;height:56px;border-radius:50%;background:#2563eb;color:#fff;font-size:13px;font-weight:bold;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(37,99,235,.4);z-index:100;cursor:pointer;user-select:none}
+  #card-btn:active{transform:scale(0.95)}
+
+  /* 答题卡遮罩与面板 */
+  #card-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);z-index:101;display:none;opacity:0;transition:opacity 0.3s}
+  #card-overlay.show{display:block;opacity:1}
+  
+  #card-panel{position:fixed;bottom:-100%;left:0;right:0;background:#fff;z-index:102;border-radius:16px 16px 0 0;max-height:80vh;display:flex;flex-direction:column;transition:bottom 0.3s ease;box-shadow:0 -4px 20px rgba(0,0,0,.1)}
+  #card-panel.show{bottom:0}
+  
+  .card-header{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid #eee;font-weight:bold;font-size:18px}
+  .card-header .close{font-size:26px;cursor:pointer;color:#999;line-height:1}
+  .card-legend{padding:10px 20px;display:flex;gap:15px;font-size:13px;background:#f8f9fa;border-bottom:1px solid #eee}
+  .legend-dot{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:4px;vertical-align:middle}
+  .legend-dot.correct{background:#10b981}
+  .legend-dot.wrong{background:#ef4444}
+  .legend-dot.unanswered{background:#d1d5db}
+  
+  .card-content{padding:15px 20px;overflow-y:auto;flex:1;-webkit-overflow-scrolling:touch}
+  .card-group{margin-bottom:20px}
+  .card-group-title{font-size:14px;color:#666;margin-bottom:10px;font-weight:bold}
+  .card-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(40px, 1fr));gap:10px}
+  
+  .card-item{display:flex;align-items:center;justify-content:center;height:40px;border-radius:6px;background:#f3f4f6;color:#374151;font-size:14px;cursor:pointer;border:1px solid #e5e7eb;transition:all 0.2s}
+  .card-item.correct{background:#d1fae5;color:#065f46;border-color:#34d399}
+  .card-item.wrong{background:#fee2e2;color:#991b1b;border-color:#f87171}
+  .card-item.unanswered{background:#f3f4f6;color:#6b7280}
+  
+  @media (max-width: 600px){
+    body{padding:12px 10px 90px}
+    h1{font-size:18px;margin:8px 0 12px}
+    .q{padding:12px;border-radius:8px}
+    .qt{font-size:15px}
+    label{font-size:15px;padding:2px 0}
+    input[type=text]{font-size:16px;width:100%}
+    .bar{padding:10px calc(10px + env(safe-area-inset-bottom))}
+    #card-btn{width:50px;height:50px;bottom:85px;right:15px;font-size:12px}
+  }
 </style>
 </head>
 <body>
-<h1>信息工程学院党培题库（自动判分 · 按题型筛选）</h1>
-
-<div class="filter-bar" id="filterBar">
-  <button class="filter active" data-type="all" onclick="setFilter('all')">全部题型</button>
-  <button class="filter" data-type="single" onclick="setFilter('single')">单选</button>
-  <button class="filter" data-type="multi" onclick="setFilter('multi')">多选</button>
-  <button class="filter" data-type="judge" onclick="setFilter('judge')">判断</button>
-  <button class="filter" data-type="fill" onclick="setFilter('fill')">填空</button>
-</div>
-
+<h1>信息工程学院党培题库</h1>
 <div id="quiz"></div>
 
+<!-- 底部操作栏 -->
 <div class="bar">
-  <button onclick="submitQuiz()">提交判分</button>
-  <button class="ghost" onclick="location.reload()">重做</button>
-  <span id="score"></span>
+  <button class="ghost" onclick="location.reload()">重新开始</button>
+</div>
+
+<!-- 答题卡悬浮按钮 -->
+<div id="card-btn" onclick="toggleCard()">答题卡</div>
+
+<!-- 答题卡遮罩与面板 -->
+<div id="card-overlay" onclick="toggleCard()"></div>
+<div id="card-panel">
+  <div class="card-header">
+    <span>答题卡</span>
+    <span class="close" onclick="toggleCard()">&times;</span>
+  </div>
+  <div class="card-legend">
+    <span><i class="legend-dot correct"></i>正确</span>
+    <span><i class="legend-dot wrong"></i>错误</span>
+    <span><i class="legend-dot unanswered"></i>未做</span>
+  </div>
+  <div class="card-content" id="card-content">
+    <!-- 题号将通过 JS 动态生成 -->
+  </div>
 </div>
 
 <script>
@@ -132,7 +190,7 @@ const QUESTIONS = [
   {t:'judge',q:'中国共产党党旗为旗面缀有金黄色党徽图案的红旗。',a:'正确'},
   {t:'judge',q:'中国共产党的党章是中国共产党的象征和标志。',a:'错误'},
 
-  // ===== 填空 1-30（已删除重复的第17题） =====
+  // ===== 填空 1-30 =====
   {t:'fill',q:'______是党执政兴国的第一要务。',a:['发展']},
   {t:'fill',q:'预备党员的预备期一般为______。',a:['一年','1年']},
   {t:'fill',q:'社会主义的根本任务是______。',a:['发展生产力']},
@@ -164,7 +222,7 @@ const QUESTIONS = [
   {t:'fill',q:'申请入党的人，要填写______。',a:['入党志愿书']}
 ];
 
-/* ===== 剩余题目：单选31-105、多选23-100（已清理重复题、修正时政表述） ===== */
+/* ===== 剩余题目：单选31-105、多选23-100 ===== */
 const MORE = {
 single: `中国共产党党员必须______为人民服务，不惜牺牲个人的一切，为实现共产主义奋斗终身。~~A.坚持不懈|B.不忘初心|C.有目的性|D.全心全意~~D
 《党章》规定，中国共产党党员永远是劳动人民的普通一员。除了法律和政策规定范围内的个人利益和工作职权以外，所有共产党员不得谋求任何______。~~A.私利和特权|B.政治权力|C.经济利益|D.物质享受~~A
@@ -324,43 +382,31 @@ ______团体机关可以成立党组？~~A.中央和地方国家机关|B.人民�
 })();
 
 const LETTERS = 'ABCDEFGHIJ';
-let currentType = 'all';
-let displayedQuestions = [];
+const userAnswers = {}; // 记录每道题的状态 'correct', 'wrong', 'unanswered'
 
-function typeName(t){return t==='single'?'单选':t==='multi'?'多选':t==='judge'?'判断':'填空';}
-
-function getFilteredQuestions(type){
-  if(type === 'all') return QUESTIONS.slice();
-  return QUESTIONS.filter(q => q.t === type);
-}
-
-function setFilter(type){
-  currentType = type;
-  document.querySelectorAll('.filter').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.type === type);
-  });
-  document.getElementById('score').textContent = '';
-  render();
-}
+function typeName(t){return t==='single'?'单选题':t==='multi'?'多选题':t==='judge'?'判断题':'填空题';}
 
 function render(){
-  displayedQuestions = getFilteredQuestions(currentType);
   const box = document.getElementById('quiz');
-  if(displayedQuestions.length === 0){
-    box.innerHTML = '<div class="q">该题型暂无题目</div>';
-    return;
-  }
-  box.innerHTML = displayedQuestions.map((q, idx)=>{
+  box.innerHTML = QUESTIONS.map((q, i)=>{
     let inner = '';
-    if(q.t==='single' || q.t==='multi'){
-      inner = q.o.map((op,j)=>`<label><input type="${q.t==='single'?'radio':'checkbox'}" name="q${idx}" value="${j}"> ${LETTERS[j]}. ${op}</label>`).join('');
-    }else if(q.t==='judge'){
-      inner = `<label><input type="radio" name="q${idx}" value="正确"> 正确</label><label><input type="radio" name="q${idx}" value="错误"> 错误</label>`;
+    if(q.t==='single' || q.t==='judge'){
+      const opts = q.t==='single' ? q.o : ['正确', '错误'];
+      inner = opts.map((op,j)=>{
+        const val = q.t==='single' ? j : op;
+        return `<label><input type="radio" name="q${i}" value="${val}" onchange="checkQuestion(${i})"> ${q.t==='single' ? LETTERS[j]+'. '+op : op}</label>`;
+      }).join('');
+    }else if(q.t==='multi'){
+      inner = q.o.map((op,j)=>`<label><input type="checkbox" name="q${i}" value="${j}"> ${LETTERS[j]}. ${op}</label>`).join('');
+      inner += `<button class="confirm-btn" onclick="checkQuestion(${i})">确定答案</button>`;
     }else{
-      inner = `<input type="text" id="fill${idx}" placeholder="请输入答案">`;
+      inner = `<input type="text" id="fill${i}" placeholder="请输入答案" onkeydown="if(event.key==='Enter') checkQuestion(${i})">`;
+      inner += `<button class="confirm-btn" onclick="checkQuestion(${i})">确定答案</button>`;
     }
-    return `<div class="q" id="q${idx}"><div class="qt"><span class="tag">${typeName(q.t)}</span>${idx+1}. ${q.q}</div>${inner}<div class="fb" id="fb${idx}"></div></div>`;
+    return `<div class="q" id="q${i}"><div class="qt"><span class="tag">${typeName(q.t)}</span>${i+1}. ${q.q}</div>${inner}<div class="fb" id="fb${i}"></div></div>`;
   }).join('');
+  
+  initAnswerCard();
 }
 
 function norm(s){
@@ -374,32 +420,105 @@ function answerText(q){
   return q.a.join(' / ');
 }
 
-function submitQuiz(){
-  let correct = 0;
-  displayedQuestions.forEach((q, idx)=>{
-    let ok = false, user = '';
-    if(q.t==='single' || q.t==='judge'){
-      const el = document.querySelector(`input[name="q${idx}"]:checked`);
-      user = el ? el.value : '';
-      if(q.t==='single') ok = (user !== '' && LETTERS[+user] === q.a);
-      else ok = (user === q.a);
-    }else if(q.t==='multi'){
-      const els = [...document.querySelectorAll(`input[name="q${idx}"]:checked`)];
-      user = els.map(e=>LETTERS[+e.value]).sort().join('');
-      const ans = q.a.split('').sort().join('');
-      ok = (user === ans);
-    }else{
-      const el = document.getElementById('fill'+idx);
-      user = el ? el.value : '';
-      ok = q.a.some(a=>norm(user) === norm(a));
-    }
-    if(ok) correct++;
-    const fb = document.getElementById('fb'+idx);
-    fb.className = 'fb ' + (ok ? 'ok' : 'bad');
-    fb.textContent = ok ? '✅ 正确' : '❌ 错误，正确答案：' + answerText(q);
+function checkQuestion(i) {
+  const q = QUESTIONS[i];
+  const fb = document.getElementById('fb' + i);
+  const qDiv = document.getElementById('q' + i);
+  
+  // 如果已经作答过，直接返回
+  if (userAnswers[i] && userAnswers[i] !== 'unanswered') return; 
+
+  let ok = false, user = '';
+  if (q.t === 'single' || q.t === 'judge') {
+    const el = document.querySelector(`input[name="q${i}"]:checked`);
+    if (!el) return;
+    user = el.value;
+    if (q.t === 'single') ok = (LETTERS[+user] === q.a);
+    else ok = (user === q.a);
+  } else if (q.t === 'multi') {
+    const els = [...document.querySelectorAll(`input[name="q${i}"]:checked`)];
+    if (els.length === 0) { alert('请至少选择一个选项'); return; }
+    user = els.map(e => LETTERS[+e.value]).sort().join('');
+    const ans = q.a.split('').sort().join('');
+    ok = (user === ans);
+  } else {
+    const el = document.getElementById('fill' + i);
+    user = el ? el.value.trim() : '';
+    if (!user) { alert('请填写答案'); return; }
+    ok = q.a.some(a => norm(user) === norm(a));
+  }
+
+  // 记录状态
+  userAnswers[i] = ok ? 'correct' : 'wrong';
+  
+  // 显示反馈信息
+  fb.className = 'fb ' + (ok ? 'ok' : 'bad');
+  fb.textContent = ok ? '✅ 正确' : '❌ 错误，正确答案：' + answerText(q);
+  qDiv.classList.add(ok ? 'q-correct' : 'q-wrong');
+
+  // 禁用题目输入
+  qDiv.querySelectorAll('input').forEach(input => input.disabled = true);
+  const btn = qDiv.querySelector('.confirm-btn');
+  if (btn) btn.style.display = 'none';
+
+  // 更新答题卡状态
+  updateCardStatus(i, userAnswers[i]);
+}
+
+/* ===== 答题卡逻辑 ===== */
+function initAnswerCard() {
+  const container = document.getElementById('card-content');
+  let html = '';
+  const groups = [
+    {type: 'single', name: '单选题'},
+    {type: 'multi', name: '多选题'},
+    {type: 'judge', name: '判断题'},
+    {type: 'fill', name: '填空题'}
+  ];
+  
+  groups.forEach(g => {
+    const qs = QUESTIONS.map((q, i) => ({...q, originalIndex: i})).filter(q => q.t === g.type);
+    if (qs.length === 0) return;
+    html += `<div class="card-group"><div class="card-group-title">${g.name}</div><div class="card-grid">`;
+    qs.forEach(q => {
+      html += `<span class="card-item unanswered" id="card-item-${q.originalIndex}" onclick="jumpTo(${q.originalIndex})">${q.originalIndex + 1}</span>`;
+    });
+    html += `</div></div>`;
   });
-  document.getElementById('score').textContent = `得分：${correct}/${displayedQuestions.length}`;
-  window.scrollTo({top:0,behavior:'smooth'});
+  container.innerHTML = html;
+}
+
+function toggleCard() {
+  const panel = document.getElementById('card-panel');
+  const overlay = document.getElementById('card-overlay');
+  const isShowing = panel.classList.contains('show');
+  
+  if (isShowing) {
+    panel.classList.remove('show');
+    overlay.classList.remove('show');
+    setTimeout(() => overlay.style.display = 'none', 300);
+  } else {
+    overlay.style.display = 'block';
+    // 触发重绘以应用 opacity 过渡
+    void overlay.offsetWidth; 
+    panel.classList.add('show');
+    overlay.classList.add('show');
+  }
+}
+
+function updateCardStatus(i, status) {
+  const el = document.getElementById('card-item-' + i);
+  if (el) {
+    el.className = 'card-item ' + status;
+  }
+}
+
+function jumpTo(i) {
+  toggleCard(); // 关闭答题卡
+  const el = document.getElementById('q' + i);
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
 }
 
 render();
