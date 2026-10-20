@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>中共江西科技学院委员会党校结业考试题库</title>
+<style>
+  *{box-sizing:border-box;}
+  body{
+    margin:0;padding:24px 16px 70px;
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+    background:#f5f6f8;color:#222;line-height:1.7;
+  }
+  .wrap{max-width:880px;margin:0 auto;}
+  header{
+    background:linear-gradient(135deg,#c62828,#8e0000);
+    color:#fff;padding:22px 26px;border-radius:14px;
+    box-shadow:0 6px 18px rgba(198,40,40,.25);
+  }
+  h1{margin:0 0 4px;font-size:21px;letter-spacing:1px;}
+  .sub{opacity:.85;font-size:13px;}
+  .stats{display:flex;gap:26px;margin-top:16px;flex-wrap:wrap;font-size:13px;}
+  .stats div{display:flex;flex-direction:column;}
+  .stats b{font-size:19px;line-height:1.3;font-weight:700;}
+
+  .panel{
+    background:#fff;border-radius:12px;padding:14px 16px;margin:16px 0;
+    box-shadow:0 1px 3px rgba(0,0,0,.06);
+  }
+  .panel .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+  .panel .row + .row{margin-top:10px;}
+  .panel .lbl{font-size:13px;color:#888;min-width:56px;}
+  .panel button{
+    padding:6px 16px;border:1.5px solid #e0e0e0;background:#fff;border-radius:20px;
+    font-size:13.5px;cursor:pointer;font-family:inherit;color:#444;transition:.15s;
+  }
+  .panel button:hover{border-color:#ef9a9a;}
+  .panel button.active{background:#c62828;border-color:#c62828;color:#fff;}
+  .panel .reset{margin-left:auto;border-color:#c62828;color:#c62828;}
+  .panel .reset:hover{background:#ffebee;}
+
+  /* ===== 题目卡片 ===== */
+  .card{
+    background:#fff;border-radius:12px;padding:16px 18px;margin-bottom:12px;
+    box-shadow:0 1px 3px rgba(0,0,0,.07);
+    scroll-margin-top: 20px;
+  }
+  .card.flash{animation:flash 1.6s ease;}
+  @keyframes flash{
+    0%{box-shadow:0 0 0 3px rgba(198,40,40,.55);}
+    100%{box-shadow:0 1px 3px rgba(0,0,0,.07);}
+  }
+  .qhead{display:flex;gap:8px;align-items:center;margin-bottom:8px;}
+  .tag{font-size:12px;padding:1px 9px;border-radius:20px;}
+  .tag.choice{background:#e8eaf6;color:#3949ab;}
+  .tag.multi{background:#e1f5fe;color:#0277bd;}
+  .tag.fill{background:#fff3e0;color:#e65100;}
+  .tag.judge{background:#e0f2f1;color:#00695c;}
+  .tag.essay{background:#f3e5f5;color:#7b1fa2;}
+  .num{font-size:13px;color:#999;margin-left:auto;font-weight:600;}
+  .qtext{font-weight:500;margin-bottom:10px;font-size:15.5px;}
+  .options{display:flex;flex-direction:column;gap:8px;}
+  .options.judge{flex-direction:row;}
+  .options.judge .opt{flex:1;text-align:center;}
+  .opt{
+    text-align:left;padding:9px 14px;border:1.5px solid #e4e4e4;border-radius:9px;
+    background:#fff;font-size:15px;cursor:pointer;font-family:inherit;
+    transition:.15s;color:#333;line-height:1.55;
+  }
+  .opt:hover:not(:disabled){border-color:#c62828;background:#fff8f8;}
+  .opt:disabled{cursor:default;opacity:.95;}
+  .opt.ok{border-color:#2e7d32;background:#e8f5e9;color:#1b5e20;}
+  .opt.bad{border-color:#c62828;background:#ffebee;color:#b71c1c;}
+  .opt.selected{border-color:#1976d2;background:#e3f2fd;color:#1565c0;}
+  
+  .fillq{font-size:15.5px;line-height:2.1;font-weight:500;}
+  .blank{
+    border:none;border-bottom:1.6px solid #bbb;background:#fafafa;
+    min-width:110px;padding:2px 8px;font-size:15px;text-align:center;
+    outline:none;color:#1565c0;font-family:inherit;border-radius:4px 4px 0 0;
+    transition:.2s;
+  }
+  .blank:focus{border-bottom-color:#c62828;background:#fff8f8;}
+  .blank.ok{border-bottom-color:#2e7d32;background:#e8f5e9;color:#1b5e20;}
+  .blank.bad{border-bottom-color:#c62828;background:#ffebee;color:#b71c1c;}
+  .blank:disabled{opacity:1;}
+  .submit{
+    margin-top:12px;padding:8px 22px;background:#c62828;color:#fff;border:none;
+    border-radius:8px;cursor:pointer;font-size:14px;font-family:inherit;transition:.15s;
+  }
+  .submit:hover{background:#a11c1c;}
+  
+  .essay-input {
+    width:100%; height:120px; padding:12px; border-radius:8px; 
+    border:1.5px solid #e4e4e4; font-family:inherit; font-size:14.5px;
+    outline:none; resize:vertical; margin-top:8px; background:#fafafa;
+    transition:.2s;
+  }
+  .essay-input:focus{border-color:#c62828; background:#fff;}
+
+  .fb{margin-top:11px;font-size:14px;padding:10px 12px;border-radius:8px; line-height:1.6;}
+  .fb.right{background:#e8f5e9;color:#1b5e20;}
+  .fb.wrong{background:#ffebee;color:#b71c1c;}
+  .fb .exp{
+    margin-top:8px; font-size:13px; color:#555; background:#f9f9f9;
+    padding:8px 10px; border-radius:6px; border-left:3px solid #1976d2;
+  }
+  .empty{text-align:center;color:#999;padding:40px;}
+  .note{
+    margin-top:18px;padding:12px 16px;background:#fff8e1;border-radius:10px;
+    font-size:13px;color:#795548;line-height:1.8;
+  }
+
+  /* ===== 答题卡悬浮按钮 ===== */
+  .fab-toc {
+    position: fixed; right: 24px; bottom: 40px; width: 60px; height: 60px;
+    border-radius: 50%; background: #1976d2; color: #fff; border: none;
+    box-shadow: 0 4px 14px rgba(25, 118, 210, 0.45); font-size: 14px; font-weight: 600;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    z-index: 900; transition: transform 0.2s, background 0.2s;
+  }
+  .fab-toc:hover { background: #1565c0; transform: scale(1.05); }
+  .fab-badge {
+    position: absolute; top: -4px; right: -4px; background: #c62828; color: #fff;
+    font-size: 11px; padding: 2px 6px; border-radius: 10px; border: 2px solid #f5f6f8;
+    font-weight: normal; line-height: 1.2;
+  }
+
+  /* ===== 答题卡弹窗 ===== */
+  .toc-modal {
+    position: fixed; inset: 0; background: rgba(0, 0, 0, 0.45); z-index: 1000;
+    display: flex; align-items: flex-end; opacity: 0; visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+  }
+  .toc-modal.show { opacity: 1; visibility: visible; }
+  .toc-content {
+    background: #fff; width: 100%; max-height: 75vh; border-radius: 16px 16px 0 0;
+    padding: 20px; box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+    transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: flex; flex-direction: column;
+  }
+  .toc-modal.show .toc-content { transform: translateY(0); }
+  @media (min-width: 600px) {
+    .toc-modal { align-items: center; justify-content: center; }
+    .toc-content { width: 90%; max-width: 600px; border-radius: 16px; max-height: 80vh; }
+  }
+  .toc-head { display: flex; align-items: center; margin-bottom: 16px; }
+  .toc-head .title { font-weight: 600; font-size: 16px; color: #333; display: flex; align-items: center; gap: 8px; }
+  .toc-head .title::before { content: ""; width: 6px; height: 16px; border-radius: 3px; background: #1976d2; }
+  .toc-summary { font-size: 13px; color: #888; margin-left: 16px; flex: 1; }
+  .toc-close { background: none; border: none; font-size: 26px; color: #aaa; cursor: pointer; line-height: 1; padding: 0 4px; transition: color 0.2s; }
+  .toc-close:hover { color: #333; }
+  
+  .legend { display: flex; gap: 16px; font-size: 13px; color: #666; margin-bottom: 12px; }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .legend i { width: 12px; height: 12px; border-radius: 4px; display: inline-block; }
+  i.todo { background: #f1f1f1; border: 1px solid #ddd; }
+  i.right { background: #c8e6c9; border: 1px solid #81c784; }
+  i.wrong { background: #ffcdd2; border: 1px solid #e57373; }
+
+  .toc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(44px, 1fr)); gap: 8px; overflow-y: auto; padding-right: 4px; flex: 1; }
+  .toc-btn { padding: 8px 0; border-radius: 8px; border: 1px solid #e0e0e0; background: #fafafa; font-size: 13px; cursor: pointer; font-family: inherit; color: #666; transition: 0.12s; }
+  .toc-btn:hover { border-color: #1976d2; color: #1976d2; }
+  .toc-btn.right { background: #e8f5e9; border-color: #a5d6a7; color: #1b5e20; font-weight: 600; }
+  .toc-btn.wrong { background: #ffebee; border-color: #ef9a9a; color: #b71c1c; font-weight: 600; }
+
+  .toc-foot { display: flex; gap: 10px; margin-top: 14px; padding-top: 14px; border-top: 1px solid #eee; }
+  .toc-foot button { flex: 1; padding: 9px 0; border-radius: 9px; font-size: 14px; font-family: inherit; cursor: pointer; border: 1.5px solid transparent; transition: .15s; }
+  .toc-reset { background: #fff; border-color: #c62828; color: #c62828; }
+  .toc-reset:hover { background: #ffebee; }
+  .toc-save { background: #c62828; color: #fff; }
+  .toc-save:hover { background: #a11c1c; }
+
+  @media(max-width:520px){
+    .stats{gap:16px;}
+    .panel .reset{margin-left:0;}
+    .fab-toc { right: 16px; bottom: 20px; width: 54px; height: 54px; font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>中共江西科技学院委员会党校结业考试</h1>
+    <div class="sub">闭卷考试 · 实时判分 · 详细解析 · 进度保存</div>
+    <div class="stats">
+      <div><span>当前题目</span><b id="stat-total">0</b></div>
+      <div><span>已作答</span><b id="stat-done">0</b></div>
+      <div><span>答对</span><b id="stat-right">0</b></div>
+      <div><span>正确率</span><b id="stat-rate">—</b></div>
+    </div>
+  </header>
+
+  <div class="panel">
+    <div class="row">
+      <span class="lbl">练习模式</span>
+      <button data-mode="all" class="active">综合练习</button>
+      <button data-mode="choice">单选题</button>
+      <button data-mode="multi">多选题</button>
+      <button data-mode="fill">填空题</button>
+      <button data-mode="judge">判断题</button>
+      <button data-mode="essay">论述题</button>
+    </div>
+    <div class="row">
+      <span class="lbl">题库来源</span>
+      <button data-source="all" class="active">全部题目</button>
+      <button data-source="exam">江西科技学院党校考试</button>
+      <button class="reset" id="resetBtn">重新开始</button>
+    </div>
+  </div>
+
+  <div id="quiz"></div>
+
+  <div class="note">
+    <b>说明：</b>题号已全库统一连续编号；点击右下角“答题卡”可查看整体进度，点击题号即可跳转定位。答题进度自动保存在本机浏览器。
+  </div>
+</div>
+
+<!-- 悬浮答题卡按钮 -->
+<button class="fab-toc" id="fabToc">
+  答题卡
+  <span class="fab-badge" id="fabBadge">0/0</span>
+</button>
+
+<!-- 答题卡弹窗 -->
+<div class="toc-modal" id="tocModal">
+  <div class="toc-content">
+    <div class="toc-head">
+      <span class="title">答题卡</span>
+      <span class="toc-summary" id="tocSummary">已做 0/0 · 正确 0 · 错误 0</span>
+      <button class="toc-close" id="tocClose">×</button>
+    </div>
+    <div class="legend">
+      <span><i class="todo"></i>未做</span>
+      <span><i class="right"></i>正确</span>
+      <span><i class="wrong"></i>错误</span>
+    </div>
+    <div class="toc-grid" id="tocGrid"></div>
+    <div class="toc-foot">
+      <button class="toc-reset" id="tocResetBtn">清空进度</button>
+      <button class="toc-save" id="tocSaveBtn">保存并关闭</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* =====================================================================
+   题库数据 (基于图片内容提取，包含解析)
+   ===================================================================== */
+const BANK = {
+  exam: {
+    label: '中共江西科技学院委员会党校结业考试',
+    fill: [
+      {q:'中国共产党以马克思列宁主义、毛泽东思想、邓小平理论、“三个代表”重要思想、科学发展观、____作为自己的行动指南。', ans:['习近平新时代中国特色社会主义思想'], exp:'党章总纲明确规定，习近平新时代中国特色社会主义思想是党的行动指南。'},
+      {q:'党的最高理想和最终目标是实现____。', ans:['共产主义'], exp:'党章总纲明确规定，党的最高理想和最终目标是实现共产主义。'},
+      {q:'党员如果没有正当理由，连续____个月不参加党的组织生活，或不交纳党费，或不做党所分配的工作，就被认为是自行脱党。', ans:[['6','六']], exp:'党章第九条规定，连续六个月不参加党的组织生活等，被认为是自行脱党。'},
+      {q:'党的纪律处分有五种：警告、严重警告、____、留党察看、开除党籍。', ans:['撤销党内职务'], exp:'党章第四十一条规定，党纪处分共五种：警告、严重警告、撤销党内职务、留党察看、开除党籍。'},
+      {q:'党的组织生活制度主要包括“三会一课”制度、____、谈心谈话制度、民主生活会制度等。', ans:['民主评议党员制度'], exp:'党的组织生活制度包括“三会一课”、民主生活会、双重组织生活、谈心谈话、民主评议党员等。'},
+      {q:'党的全国代表大会每____年举行一次，由中央委员会召集。', ans:[['5','五']], exp:'党章第十九条规定，党的全国代表大会每五年举行一次。'},
+      {q:'党的基层委员会、总支部委员会、支部委员会每届任期____年或____年。', ans:[['3','三'], ['5','五']], exp:'根据最新党章第三十条，党的基层委员会、总支部委员会、支部委员会每届任期3年至5年。'},
+      {q:'党员享有下列权利：参加党的有关会议，讨论和表决____、选举和被选举党的各级领导机关和被推荐为上一级组织代表、在党的会议上和党的报刊上，参加关于党的政策问题的讨论等。', ans:['党的政策'], exp:'党章第四条规定了党员权利，包括参加关于党的政策问题的讨论等。'},
+      {q:'预备党员的权利，除了没有____、____和____以外，也同正式党员一样。', ans:['表决权', '选举权', '被选举权'], exp:'党章第七条规定，预备党员除了没有表决权、选举权和被选举权以外，也同正式党员一样。'},
+      {q:'党的根本组织原则是____。', ans:['民主集中制'], exp:'党章总纲明确规定，党的根本组织原则是民主集中制。'}
+    ],
+    choice: [
+      {q:'中国共产党的性质是什么？( )', o:['无产阶级政党','资产阶级政党','人民群众利益的代表','工人阶级领导的、以工农联盟为基础的人民民主专政的社会主义国家'], a:0, exp:'党章总纲规定，中国共产党是中国工人阶级的先锋队，同时是中国人民和中华民族的先锋队。A选项最符合。D选项是我国的国体。'},
+      {q:'下列哪项不属于党的三大优良作风？( )', o:['理论和实践相结合的作风','密切联系群众的作风','艰苦奋斗的作风','批评和自我批评的作风'], a:2, exp:'党的三大优良作风是：理论联系实际、密切联系群众、批评和自我批评。艰苦奋斗是党的优良传统，但不属于“三大作风”之列。'},
+      {q:'党的最高领导机关是？( )', o:['党的中央委员会','党的中央政治局','党的全国代表大会和它所产生的中央委员会','党的中央纪律检查委员会'], a:2, exp:'党章第十条规定，党的最高领导机关，是党的全国代表大会和它所产生的中央委员会。'},
+      {q:'下列哪项不属于入党誓词的内容？( )', o:['拥护党的纲领','遵守党的章程','履行党员义务','追求个人利益'], a:3, exp:'入党誓词中明确包含“拥护党的纲领，遵守党的章程，履行党员义务”，D选项显然错误。'},
+      {q:'党的基层组织的基本任务不包括哪一项？( )', o:['宣传和执行党的路线、方针、政策','组织党员进行政治理论学习','审批预备党员和预备党员转正','密切联系群众'], a:2, exp:'审批预备党员和预备党员转正是基层党委的职权，不是党支部（基层组织）的基本任务。'},
+      {q:'根据党章规定，中国共产党的党徽党旗是( )。', o:['中国共产党的象征和标志','中国人民和中华民族的象征','中国工人阶级的象征','中国共产党的荣誉称号'], a:0, exp:'党章第五十三条规定，中国共产党的党徽党旗是中国共产党的象征和标志。'},
+      {q:'党的根本组织原则是什么？( )', o:['群众路线','实事求是','民主集中制','政治挂帅'], a:2, exp:'民主集中制是党的根本组织原则。'},
+      {q:'下列哪项不是中国共产党党员必须履行的义务？( )', o:['认真学习马克思列宁主义、毛泽东思想、邓小平理论、“三个代表”重要思想、科学发展观、习近平新时代中国特色社会主义思想','自觉遵守党的纪律，首先是党的政治纪律和政治规矩','为群众谋利益，不谋取私利','享有表决权、选举权和被选举权'], a:3, exp:'享有表决权、选举权和被选举权属于党员的权利，而非义务。'},
+      {q:'党的思想路线的核心内容是( )。', o:['解放思想、实事求是','坚持四项基本原则','以人民为中心','依法治国和以德治国相结合'], a:0, exp:'党的思想路线的核心是实事求是，解放思想是实事求是的前提。'},
+      {q:'党的中央纪律检查委员会在党的( )领导下进行工作。', o:['政治局','中央委员会','书记处','全国代表大会'], a:1, exp:'党章第四十五条规定，党的中央纪律检查委员会在党的中央委员会领导下进行工作。'},
+      {q:'下列关于党的纪律的说法中，哪一项是正确的？( )', o:['党的纪律处分一经作出即生效','党员对党的纪律处分决定不服，可以提出申诉','党的纪律处分只能由党的中央委员会作出','党员只要没有违反党的纪律，就可以不受任何约束'], a:1, exp:'党章第四十三条规定，党员对党的纪律处分决定不服，可以提出申诉。'},
+      {q:'下列关于党的地方各级代表大会的说法，哪一项是错误的？( )', o:['党的地方各级代表大会由同级党的委员会召集','党的地方各级代表大会选举出席上级党代表大会的代表','党的地方各级代表大会每五年举行一次','党的地方各级代表大会负责审批下级党组的预算和决算'], a:3, exp:'党的地方各级代表大会没有审批下级党组的预算和决算的职权。'},
+      {q:'下列关于党的组织原则的说法中，哪一项是错误的？( )', o:['党的组织原则是民主集中制','民主集中制是党的根本组织原则','民主集中制要求下级服从上级','民主集中制要求个人服从组织，少数服从多数'], a:2, exp:'标准表述为“下级组织服从上级组织”，C选项缺少“组织”二字，表述不严谨，在单选题中常作为错误选项。'},
+      {q:'下列关于党的纪律检查机关的说法，哪一项是错误的？( )', o:['党的中央纪律检查委员会在党的中央委员会领导下进行工作','各级纪律检查委员会每届任期和同级党的委员会相同','党的各级纪律检查委员会由同级党的代表大会选举产生','党的基层委员会设立纪律检查委员会'], a:3, exp:'党章规定，党的基层委员会是设立纪律检查委员，不是设立纪律检查委员会。'}
+    ],
+    multi: [
+      {q:'党的中央和地方各级委员会在必要时可以召集( )', o:['党的代表会议','党的全国代表大会','党的基层代表会议','党的基层委员会全体会议'], a:[0], exp:'党章第十二条规定，党的中央和地方各级委员会在必要时召集代表会议，讨论和决定需要及时解决的重大问题。'},
+      {q:'下列关于党的纪律的说法中，正确的有( )', o:['党的纪律处分必须坚持党章党规、全面从严治党原则','党的纪律处分可以代替法律制裁','党的纪律处分应当坚持惩前毖后、治病救人方针','党的纪律处分必须坚持实事求是、证据确凿、定性准确'], a:[0,2,3], exp:'B选项错误，党的纪律处分不能代替法律制裁。'},
+      {q:'下列哪项属于党员的义务？( )', o:['参加党的有关会议，讨论和决定党的政策','贯彻执行党的基本路线和各项方针、政策','密切联系群众，向群众宣传党的主张','自觉遵守党的纪律，首先是党的政治纪律和政治规矩'], a:[1,2,3], exp:'A选项属于党员的权利。'},
+      {q:'下列哪些属于党员享有的权利？( )', o:['行使表决权、选举权，有被选举权','在党组织讨论决定对党员的党纪处分或作出鉴定时，本人有权参加和进行申辩','对党的决议和政策如有不同意见，在坚决执行的前提下，可以声明保留','向党的上级组织直至中央提出请求、申诉和控告'], a:[0,1,2,3], exp:'四项均为党章规定的党员权利。'},
+      {q:'下列哪些情形属于违反政治纪律的行为？( )', o:['对党中央决策部署阳奉阴违、搞两面派、做两面人','未经组织批准参加其他集会、游行、示威等活动','搞团团伙伙、结党营私、拉帮结派、搞政治阴谋活动','妄议中央大政方针，破坏党的集中统一'], a:[0,1,2,3], exp:'四项均属于违反党的政治纪律的行为。'},
+      {q:'党章规定，党员的义务和权利是( )', o:['相互依存的','相互制约的','相辅相成的','不可分割的'], a:[0,2,3], exp:'B选项“相互制约”表述错误，党员义务和权利是相互依存、相辅相成、不可分割的。'},
+      {q:'党的二十大报告强调，要构建怎样的新发展格局？( )', o:['以国内大循环为主体','国内国际双循环相互促进','以国外大循环为主体','加强国际合作'], a:[0,1], exp:'党的二十大报告指出，要构建以国内大循环为主体、国内国际双循环相互促进的新发展格局。'},
+      {q:'党的二十大报告指出，要深入实施哪些战略？( )', o:['科教兴国战略','人才强国战略','创新驱动发展战略','乡村振兴战略'], a:[0,1,2,3], exp:'二十大报告明确提出深入实施科教兴国战略、人才强国战略、创新驱动发展战略、乡村振兴战略等。'},
+      {q:'下列哪些选项是党的二十大报告中提到的关于全面从严治党的内容？( )', o:['全面从严治党永远在路上','要坚持严的主基调不动摇','完善党的自我革命制度规范体系','坚决打赢反腐败斗争攻坚战持久战'], a:[0,1,2,3], exp:'四项均属于二十大报告关于全面从严治党的重要内容。'},
+      {q:'下列哪些选项是《中国共产党纪律处分条例》中规定的党员必须遵守的纪律要求？( )', o:['党员必须维护党的团结统一，坚持党的政治路线','党员必须服从组织分配，积极完成党的任务','党员必须参加党的组织生活，接受党内外群众的监督','党员必须按时缴纳党费'], a:[0,1,2,3], exp:'四项均为党员必须履行的纪律要求。'}
+    ],
+    judge: [
+      {q:'党员在受到党纪处分后，仍然享有党员的权利和履行党员的义务。', a:false, exp:'受到党纪处分后，党员的权利会受到影响。例如，受到留党察看处分的党员，在留党察看期间没有表决权、选举权和被选举权。'},
+      {q:'党章规定，党的全国代表大会每年举行一次，讨论和决定党的重大事项。', a:false, exp:'党的全国代表大会每五年举行一次，而非每年。'},
+      {q:'中共二大制定了党的最高纲领和最低纲领。', a:true, exp:'1922年中共二大在上海召开，明确提出了反帝反封建的民主革命纲领，即最低纲领，并指出了实现共产主义的最高纲领。'},
+      {q:'党章规定，党的中央委员会总书记由党的全国代表大会直接选举产生。', a:false, exp:'中央委员会总书记由中央委员会全体会议选举产生，并非由全国代表大会直接选举。'},
+      {q:'党章规定，党的纪律主要包括政治纪律、组织纪律、廉洁纪律、群众纪律、工作纪律、生活纪律。', a:true, exp:'根据《中国共产党纪律处分条例》，党的纪律主要包括这六大类。'}
+    ],
+    essay: [
+      {
+        q: '作为一名要求入党的同志，请谈谈你应该怎样培养良好作风，自觉遵守党的纪律。', 
+        ans: '1. 坚定理想信念，端正入党动机。树立共产主义远大理想，把对党的事业的忠诚同坚决贯彻执行党的基本路线和各项方针政策结合起来。\n2. 坚持党和人民利益高于一切。吃苦在前，享受在后，克己奉公，多做贡献，诚心诚意为人民谋利益。\n3. 培养真抓实干、密切联系群众的优良作风。一切从实际出发，说实话、办实事、讲实效；关心群众疾苦，倾听群众呼声。\n4. 自觉遵守党的纪律，首先是党的政治纪律和政治规矩。模范遵守国家法律法规，严格保守秘密，执行党的决定，服从组织分配，积极完成党的任务。\n5. 积极参加党的组织生活。认真参加“三会一课”、民主生活会、组织生活会等，开展批评与自我批评，自觉接受党组织的教育、管理和监督。',
+        exp: '论述题主要考察对党的作风建设和纪律要求的理解，需结合党章规定和个人实际，从思想、作风、纪律、行动等多方面进行阐述。'
+      }
+    ]
+  }
+};
+
+/* =====================================================================
+   全局统一编号与构建
+   ===================================================================== */
+const ALL = [];
+(function buildAll(){
+  let no = 0;
+  ['exam'].forEach(bank => {
+    ['choice','multi','fill','judge','essay'].forEach(type => {
+      if (BANK[bank][type]) {
+        BANK[bank][type].forEach((item, i) => {
+          no++;
+          ALL.push({
+            no, bank, type, i, item,
+            key: bank + '-' + type + '-' + i
+          });
+        });
+      }
+    });
+  });
+})();
+
+/* ========== 状态与筛选 ========== */
+const state = {};
+const filter = {mode:'all', source:'all'};
+const STORAGE_KEY = 'dangpei_exam_progress_v1';
+
+function esc(s){
+  return String(s==null?'':s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+}
+function norm(s){
+  return String(s==null?'':s)
+    .replace(/\s+/g,'')
+    .replace(/[，。、；：""''（）()《》〈〉\[\]【】,.;:!?！？"'_\-—–%％]/g,'')
+    .toLowerCase();
+}
+
+/* ========== 本地存储 ========== */
+function saveProgress(){
+  try{
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  }catch(e){ console.warn('保存进度失败', e); }
+}
+
+function loadProgress(){
+  try{
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if(!saved) return;
+    Object.assign(state, JSON.parse(saved));
+  }catch(e){ console.warn('读取进度失败', e); }
+}
+
+/* ========== 单张卡片 HTML ========== */
+function buildCardHTML(it, st){
+  const {type, item, no, key} = it;
+  const typeName = {choice:'单选题', multi:'多选题', fill:'填空题', judge:'判断题', essay:'论述题'}[type];
+  let body = '';
+
+  if (type === 'choice'){
+    body = '<div class="options">';
+    item.o.forEach((o, j) => {
+      let cls = 'opt';
+      if (st){
+        if (j === item.a) cls += ' ok';
+        else if (j === st.pick) cls += ' bad';
+      }
+      body += `<button class="${cls}" data-j="${j}"${st?' disabled':''}><b>${'ABCD'[j]}.</b> ${esc(o)}</button>`;
+    });
+    body += '</div>';
+  }
+  else if (type === 'multi'){
+    body = '<div class="options">';
+    item.o.forEach((o, j) => {
+      let cls = 'opt';
+      if (st){
+        if (item.a.includes(j)) cls += ' ok';
+        else if (st.pick && st.pick.includes(j)) cls += ' bad';
+      }
+      body += `<button class="${cls}" data-j="${j}"><b>${'ABCD'[j]}.</b> ${esc(o)}</button>`;
+    });
+    body += '</div>';
+    if (!st) body += '<button class="submit" data-act="submit-multi">提交答案</button>';
+  }
+  else if (type === 'judge'){
+    body = '<div class="options judge">';
+    [true, false].forEach(v => {
+      let cls = 'opt';
+      if (st){
+        if (v === item.a) cls += ' ok';
+        else if (v === st.pick) cls += ' bad';
+      }
+      body += `<button class="${cls}" data-v="${v}"${st?' disabled':''}>${v?'√ 正确':'× 错误'}</button>`;
+    });
+    body += '</div>';
+  }
+  else if (type === 'essay'){
+    body = `<textarea class="essay-input" placeholder="请在此输入你的论述要点..." ${st ? 'disabled' : ''}>${st ? esc(st.pick) : ''}</textarea>`;
+    if (!st) body += '<button class="submit" data-act="submit-essay" style="margin-top:10px;">提交答案</button>';
+  }
+  else { // fill
+    const parts = item.q.split(/(_{3,})/);
+    let bi = 0;
+    body = '<div class="fillq">';
+    parts.forEach(p => {
+      if (/^_{3,}$/.test(p)){
+        let cls = 'blank';
+        if (st) cls += st.oks[bi] ? ' ok' : ' bad';
+        const val = st ? (st.vals[bi] || '') : '';
+        body += `<input class="${cls}" data-b="${bi}" value="${esc(val)}"${st?' disabled':''} autocomplete="off">`;
+        bi++;
+      } else {
+        body += esc(p);
+      }
+    });
+    body += '</div>';
+    if (!st) body += '<button class="submit" data-act="submit-fill">提交答案</button>';
+  }
+
+  let fb = '';
+  if (st){
+    let expHtml = item.exp ? `<div class="exp"><b>解析：</b>${esc(item.exp)}</div>` : '';
+    
+    if (type === 'fill'){
+      if (st.ok){
+        fb = `<div class="fb right">✅ 回答正确${expHtml}</div>`;
+      } else {
+        const ansText = item.ans.map((a, idx) => {
+          const accept = Array.isArray(a) ? a : [a];
+          const label = item.ans.length > 1 ? `第${idx+1}空：` : '';
+          return label + accept.join(' 或 ');
+        }).join('；');
+        fb = `<div class="fb wrong">❌ 回答错误，正确答案：<b>${esc(ansText)}</b>${expHtml}</div>`;
+      }
+    } 
+    else if (type === 'essay') {
+      fb = `<div class="fb right" style="background:#e3f2fd;color:#0d47a1;">📝 参考答案：<br><div style="margin-top:8px;white-space:pre-wrap;">${esc(item.ans)}</div>${expHtml}</div>`;
+    }
+    else {
+      if (st.ok){
+        fb = `<div class="fb right">✅ 回答正确${expHtml}</div>`;
+      } else {
+        let ansText = '';
+        if (type === 'choice') ansText = 'ABCD'[item.a] + '. ' + item.o[item.a];
+        else if (type === 'judge') ansText = item.a ? '正确' : '错误';
+        else if (type === 'multi') {
+          const sorted = [...item.a].sort();
+          ansText = sorted.map(j => 'ABCD'[j]).join(', ');
+        }
+        fb = `<div class="fb wrong">❌ 回答错误，正确答案：<b>${esc(ansText)}</b>${expHtml}</div>`;
+      }
+    }
+  }
+
+  return `<div class="card" data-key="${key}" data-bank="${it.bank}" data-type="${type}" data-i="${it.i}">
+    <div class="qhead">
+      <span class="tag ${type}">${typeName}</span>
+      <span class="num">第 ${no} 题</span>
+    </div>
+    ${type === 'fill' || type === 'essay' ? '' : `<div class="qtext">${esc(item.q)}</div>`}
+    ${body}
+    ${fb}
+  </div>`;
+}
+
+/* ========== 列表与渲染 ========== */
+function currentList(){
+  return ALL.filter(it =>
+    (filter.source === 'all' || filter.source === it.bank) &&
+    (filter.mode === 'all' || filter.mode === it.type)
+  );
+}
+
+function render(){
+  const list = currentList();
+  const wrap = document.getElementById('quiz');
+  wrap.innerHTML = list.map(it => buildCardHTML(it, state[it.key])).join('')
+    || '<p class="empty">没有符合条件的题目</p>';
+  renderToc(list);
+  updateStats();
+}
+
+function renderToc(list){
+  const grid = document.getElementById('tocGrid');
+  grid.innerHTML = list.map(it => {
+    const st = state[it.key];
+    let cls = 'toc-btn';
+    if (st) cls += st.ok ? ' right' : ' wrong';
+    return `<button class="${cls}" data-key="${it.key}" title="第 ${it.no} 题">${it.no}</button>`;
+  }).join('');
+}
+
+function updateTocStates(){
+  document.querySelectorAll('.toc-btn').forEach(btn => {
+    const st = state[btn.dataset.key];
+    btn.classList.toggle('right', !!(st && st.ok));
+    btn.classList.toggle('wrong', !!(st && !st.ok));
+  });
+}
+
+function refreshCard(card){
+  const key = card.dataset.key;
+  const it = ALL.find(x => x.key === key);
+  if (!it) return;
+  const tmp = document.createElement('div');
+  tmp.innerHTML = buildCardHTML(it, state[key]);
+  card.replaceWith(tmp.firstElementChild);
+  updateTocStates();
+  updateStats();
+}
+
+function updateStats(){
+  const cards = [...document.querySelectorAll('.card')];
+  let done = 0, right = 0;
+  cards.forEach(c => {
+    const st = state[c.dataset.key];
+    if (st){ done++; if (st.ok) right++; }
+  });
+  const total = cards.length;
+  const wrong = done - right;
+  const rate = done ? Math.round(right / done * 100) + '%' : '—';
+
+  document.getElementById('stat-total').textContent = total;
+  document.getElementById('stat-done').textContent  = done;
+  document.getElementById('stat-right').textContent = right;
+  document.getElementById('stat-rate').textContent  = rate;
+
+  document.getElementById('fabBadge').textContent = `${done}/${total}`;
+  document.getElementById('tocSummary').textContent = `已做 ${done}/${total} · 正确 ${right} · 错误 ${wrong}`;
+}
+
+/* ========== 交互事件 ========== */
+document.getElementById('quiz').addEventListener('click', e => {
+  const card = e.target.closest('.card');
+  if (!card) return;
+  const key = card.dataset.key;
+  if (state[key]) return; // 已作答
+  const it = ALL.find(x => x.key === key);
+  if (!it) return;
+  const {type, item} = it;
+
+  if (type === 'choice'){
+    const btn = e.target.closest('.opt');
+    if (!btn) return;
+    const j = +btn.dataset.j;
+    state[key] = {ok: j === item.a, pick: j};
+    saveProgress();
+    refreshCard(card);
+  }
+  else if (type === 'judge'){
+    const btn = e.target.closest('.opt');
+    if (!btn) return;
+    const v = btn.dataset.v === 'true';
+    state[key] = {ok: v === item.a, pick: v};
+    saveProgress();
+    refreshCard(card);
+  }
+  else if (type === 'multi'){
+    const btn = e.target.closest('.opt');
+    if (btn) {
+      btn.classList.toggle('selected');
+      return;
+    }
+    const submitBtn = e.target.closest('[data-act="submit-multi"]');
+    if (submitBtn) {
+      const selected = [...card.querySelectorAll('.opt.selected')].map(b => +b.dataset.j).sort();
+      if (selected.length === 0) { alert('请至少选择一个选项'); return; }
+      const correct = [...item.a].sort();
+      const ok = selected.length === correct.length && selected.every((v, i) => v === correct[i]);
+      state[key] = {ok, pick: selected};
+      saveProgress();
+      refreshCard(card);
+    }
+  }
+  else if (type === 'essay') {
+    const submitBtn = e.target.closest('[data-act="submit-essay"]');
+    if (submitBtn) {
+      const text = card.querySelector('.essay-input').value.trim();
+      if (!text) { alert('请输入你的论述内容'); return; }
+      state[key] = {ok: true, pick: text};
+      saveProgress();
+      refreshCard(card);
+    }
+  }
+  else if (type === 'fill'){
+    const btn = e.target.closest('[data-act="submit-fill"]');
+    if (!btn) return;
+    const inputs = [...card.querySelectorAll('.blank')];
+    const vals = inputs.map(x => x.value.trim());
+    const oks = inputs.map((input, bi) => {
+      const ans = item.ans[bi];
+      if (ans === undefined) return false;
+      const accept = Array.isArray(ans) ? ans : [ans];
+      return accept.some(a => norm(a) === norm(vals[bi]));
+    });
+    state[key] = {ok: oks.every(Boolean), oks, vals};
+    saveProgress();
+    refreshCard(card);
+  }
+});
+
+// 填空题回车提交
+document.getElementById('quiz').addEventListener('keydown', e => {
+  if (e.key === 'Enter' && e.target.classList && e.target.classList.contains('blank')){
+    const card = e.target.closest('.card');
+    if (!card) return;
+    const btn = card.querySelector('[data-act="submit-fill"]');
+    if (btn) btn.click();
+  }
+});
+
+/* ========== 答题卡弹窗逻辑 ========== */
+const fabToc = document.getElementById('fabToc');
+const tocModal = document.getElementById('tocModal');
+const tocClose = document.getElementById('tocClose');
+
+fabToc.addEventListener('click', () => {
+  tocModal.classList.add('show');
+});
+
+function closeToc() {
+  tocModal.classList.remove('show');
+}
+
+tocClose.addEventListener('click', closeToc);
+tocModal.addEventListener('click', (e) => {
+  if (e.target === tocModal) closeToc();
+});
+
+document.getElementById('tocGrid').addEventListener('click', e => {
+  const btn = e.target.closest('.toc-btn');
+  if (!btn) return;
+  const key = btn.dataset.key;
+  const card = document.querySelector(`.card[data-key="${key}"]`);
+  if (!card) return;
+
+  closeToc();
+
+  setTimeout(() => {
+    const cardRect = card.getBoundingClientRect();
+    const targetY = Math.max(0, window.scrollY + cardRect.top - 20);
+    window.scrollTo({top: targetY, behavior:'smooth'});
+
+    card.classList.remove('flash');
+    void card.offsetWidth;
+    card.classList.add('flash');
+    setTimeout(() => card.classList.remove('flash'), 1600);
+  }, 250);
+});
+
+/* ========== 筛选切换 ========== */
+document.querySelectorAll('[data-mode]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('[data-mode]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    filter.mode = btn.dataset.mode;
+    render();
+  });
+});
+document.querySelectorAll('[data-source]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('[data-source]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    filter.source = btn.dataset.source;
+    render();
+  });
+});
+
+/* ========== 清空 / 保存与关闭 ========== */
+function clearProgress(){
+  if (!confirm('确定要清空所有答题进度并重新开始吗？此操作不可恢复。')) return;
+  
+  // 1. 清空本地存储和内存状态
+  Object.keys(state).forEach(k => delete state[k]);
+  localStorage.removeItem(STORAGE_KEY);
+  
+  // 2. 重置筛选条件
+  filter.mode = 'all';
+  filter.source = 'all';
+  
+  // 3. 重置 UI 按钮激活状态
+  document.querySelectorAll('[data-mode]').forEach(b => {
+    if (b.dataset.mode === 'all') b.classList.add('active');
+    else b.classList.remove('active');
+  });
+  document.querySelectorAll('[data-source]').forEach(b => {
+    if (b.dataset.source === 'all') b.classList.add('active');
+    else b.classList.remove('active');
+  });
+  
+  // 4. 关闭弹窗，重新渲染并回到顶部
+  closeToc();
+  render();
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+function saveAndClose(){
+  saveProgress();
+  closeToc();
+  try { window.close(); } catch (e) { console.error(e); }
+  setTimeout(() => {
+    document.body.innerHTML = `
+      <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;background:#f5f6f8;color:#444;font-family:sans-serif;">
+        <h2 style="color:#c62828;margin-bottom:10px;">✅ 进度已安全保存</h2>
+        <p style="color:#666;font-size:15px;">您的答题进度已存入本机浏览器，下次打开页面将自动恢复。</p>
+      </div>
+    `;
+  }, 100);
+}
+
+document.getElementById('resetBtn').addEventListener('click', clearProgress);
+document.getElementById('tocResetBtn').addEventListener('click', clearProgress);
+document.getElementById('tocSaveBtn').addEventListener('click', saveAndClose);
+
+/* ========== 启动 ========== */
+loadProgress();
+render();
+</script>
+</body>
+</html>
